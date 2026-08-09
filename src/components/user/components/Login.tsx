@@ -151,7 +151,7 @@ export default function Login({ open, handleClose }: any) {
 							/>
 							<FormControlLabel
 								control={<Checkbox value='remember' color='secondary' />}
-								label='Remember me'
+								label={t('remember-me')}
 							/>
 							<Button
 								type='submit'
@@ -171,12 +171,12 @@ export default function Login({ open, handleClose }: any) {
 							<Grid container>
 								<Grid size='grow'>
 									<Link href='#' variant='body2'>
-										Forgot password?
+										{t('forgot-password')}
 									</Link>
 								</Grid>
 								<Grid size='auto'>
 									<Link href='#' variant='body2' color='secondary'>
-										{"Don't have an account? Sign Up"}
+										{t('no-account')}
 									</Link>
 								</Grid>
 							</Grid>
@@ -190,7 +190,7 @@ export default function Login({ open, handleClose }: any) {
 				onClose={handleCloseAlert}
 			>
 				<Alert onClose={handleCloseAlert} severity='success'>
-					You have been successfully logged in!
+					{t('message-login-success')}
 				</Alert>
 			</Snackbar>
 			<Snackbar
@@ -201,7 +201,7 @@ export default function Login({ open, handleClose }: any) {
 				<Alert onClose={handleCloseAlert} severity='error'>
 					{error
 						? error
-						: 'Oops! Something went wrong. Please try to log in again later.'}
+						: t('message-login-error')}
 				</Alert>
 			</Snackbar>
 		</React.Fragment>

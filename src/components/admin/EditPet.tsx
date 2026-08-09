@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import {
 	Avatar,
 	Box,
@@ -17,9 +18,9 @@ import AddImage from './components/AddImage';
 import Review from './components/Review';
 import littleLlama from '../../assets/littleLlama.png';
 
-const steps = ['Edit Information', 'Upload Picture', 'Review Details'];
-
 export default function EditPet({ user, petId }: any) {
+	const { t } = useTranslation();
+	const steps = [t('step-edit-info'), t('step-upload-picture'), t('step-review')];
 	const router = useRouter();
 	const id = petId;
 	console.log(id);
@@ -184,7 +185,7 @@ export default function EditPet({ user, petId }: any) {
 									}
 									sx={{ mt: 3, ml: 1 }}
 								>
-									{activeStep === steps.length - 1 ? 'Save Changes' : 'Next'}
+									{activeStep === steps.length - 1 ? t('button-save-changes') : t('action-next')}
 								</Button>
 							</Box>
 						</React.Fragment>

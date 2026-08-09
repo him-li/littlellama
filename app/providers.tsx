@@ -31,6 +31,12 @@ const theme = createTheme({
 		},
 		MuiCard: { styleOverrides: { root: { border: '1px solid rgba(24,32,31,.08)' } } },
 		MuiTextField: { defaultProps: { variant: 'outlined' } },
+		MuiOutlinedInput: {
+			styleOverrides: {
+				root: { minHeight: 56 },
+				input: { paddingTop: 16.5, paddingBottom: 16.5 },
+			},
+		},
 	},
 });
 

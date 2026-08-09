@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import {
 	Backdrop,
 	Modal,
@@ -68,6 +69,7 @@ const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 
 export default function PetDetails({ open, handleClose, petId, user }: any) {
 	const router = useRouter();
+	const { t } = useTranslation();
 	const [pet, setPet] = useState<Partial<Pet>>({});
 	const [saved, setSaved] = useState(false);
 
@@ -205,7 +207,7 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 									<ListItemIcon>
 										<HomeIcon />
 									</ListItemIcon>
-									<ListItemText primary='Adoption Status' />
+									<ListItemText primary={t('para-adoption-status')} />
 									<ListItemText
 										primary={pet.adoption_status}
 										primaryTypographyProps={{ textAlign: 'right' }}
@@ -215,7 +217,7 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 									<ListItemIcon>
 										<StraightenIcon style={{ rotate: '90deg' }} />
 									</ListItemIcon>
-									<ListItemText primary='Height' />
+									<ListItemText primary={t('para-height')} />
 									<ListItemText
 										primary={pet.height + ' cm'}
 										primaryTypographyProps={{ textAlign: 'right' }}
@@ -225,7 +227,7 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 									<ListItemIcon>
 										<FitnessCenterIcon />
 									</ListItemIcon>
-									<ListItemText primary='Weight' />
+									<ListItemText primary={t('para-weight')} />
 									<ListItemText
 										primary={pet.weight + ' kg'}
 										primaryTypographyProps={{ textAlign: 'right' }}
@@ -235,7 +237,7 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 									<ListItemIcon>
 										<ColorLensIcon />
 									</ListItemIcon>
-									<ListItemText primary='Color' />
+									<ListItemText primary={t('para-color')} />
 									<ListItemText
 										primary={pet.color}
 										primaryTypographyProps={{ textAlign: 'right' }}
@@ -245,9 +247,9 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 									<ListItemIcon>
 										<PriorityHighIcon />
 									</ListItemIcon>
-									<ListItemText primary='Hypoallergenic' />
+									<ListItemText primary={t('para-hypoallergenic')} />
 									<ListItemText
-										primary={pet.hypoallergenic ? 'Yes' : 'No'}
+										primary={pet.hypoallergenic ? t('yes') : t('no')}
 										primaryTypographyProps={{ textAlign: 'right' }}
 									/>
 								</ListItem>
@@ -255,7 +257,7 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 									<ListItemIcon>
 										<NoFoodIcon />
 									</ListItemIcon>
-									<ListItemText primary='Dietary Restrictions' />
+									<ListItemText primary={t('para-dietary-restrictions')} />
 									<ListItemText
 										primary={pet.dietary_restrictions}
 										primaryTypographyProps={{ textAlign: 'right' }}
@@ -276,19 +278,19 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 								{pet.adoption_status !== 'Available' && (
 									<Button variant='text' color='inherit' onClick={handleReturn}>
 										<UndoIcon sx={{ mr: 1 }} />
-										Return
+										{t('action-return')}
 									</Button>
 								)}
 								{pet.adoption_status !== 'Adopted' && (
 									<Button variant='text' color='inherit' onClick={handleAdopt}>
 										<AddHomeIcon sx={{ mr: 1 }} />
-										Adopt
+										{t('action-adopt')}
 									</Button>
 								)}
 								{pet.adoption_status !== 'Fostered' && (
 									<Button variant='text' color='inherit' onClick={handleFoster}>
 										<PetsIcon sx={{ mr: 1 }} />
-										Foster
+										{t('action-foster')}
 									</Button>
 								)}
 								<Button variant='text' color='inherit' onClick={handleSave}>
@@ -297,17 +299,17 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 									) : (
 										<StarBorderIcon sx={{ mr: 1 }} />
 									)}
-									Save
+									{t('action-save')}
 								</Button>
 								{user?.admin && (
 									<Button variant='text' color='inherit' onClick={handleEdit}>
 										<EditIcon sx={{ mr: 1 }} />
-										Edit
+										{t('action-edit')}
 									</Button>
 								)}
 								<Button variant='text' color='inherit' onClick={handleClose}>
 									<CloseIcon sx={{ mr: 1 }} />
-									Close
+									{t('action-close')}
 								</Button>
 							</ButtonGroup>
 						</CardActions>

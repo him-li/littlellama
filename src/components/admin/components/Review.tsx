@@ -17,7 +17,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import NoFoodIcon from '@mui/icons-material/NoFood';
+import { useTranslation } from 'react-i18next';
 export default function Review({ formData }: any) {
+	const { t } = useTranslation();
 	return (
 		<Card sx={style} onClick={(e) => e.stopPropagation()}>
 			<CardActionArea
@@ -60,7 +62,7 @@ export default function Review({ formData }: any) {
 						<ListItemIcon>
 							<HomeIcon />
 						</ListItemIcon>
-						<ListItemText primary='Adoption Status' />
+						<ListItemText primary={t('para-adoption-status')} />
 						<ListItemText
 							primary={formData.adoption_status}
 							primaryTypographyProps={{ textAlign: 'right' }}
@@ -70,7 +72,7 @@ export default function Review({ formData }: any) {
 						<ListItemIcon>
 							<StraightenIcon style={{ rotate: '90deg' }} />
 						</ListItemIcon>
-						<ListItemText primary='Height' />
+						<ListItemText primary={t('para-height')} />
 						<ListItemText
 							primary={formData.height + ' cm'}
 							primaryTypographyProps={{ textAlign: 'right' }}
@@ -80,7 +82,7 @@ export default function Review({ formData }: any) {
 						<ListItemIcon>
 							<FitnessCenterIcon />
 						</ListItemIcon>
-						<ListItemText primary='Weight' />
+						<ListItemText primary={t('para-weight')} />
 						<ListItemText
 							primary={formData.weight + ' kg'}
 							primaryTypographyProps={{ textAlign: 'right' }}
@@ -90,7 +92,7 @@ export default function Review({ formData }: any) {
 						<ListItemIcon>
 							<ColorLensIcon />
 						</ListItemIcon>
-						<ListItemText primary='Color' />
+						<ListItemText primary={t('para-color')} />
 						<ListItemText
 							primary={formData.color}
 							primaryTypographyProps={{ textAlign: 'right' }}
@@ -100,9 +102,9 @@ export default function Review({ formData }: any) {
 						<ListItemIcon>
 							<PriorityHighIcon />
 						</ListItemIcon>
-						<ListItemText primary='Hypoallergenic' />
+						<ListItemText primary={t('para-hypoallergenic')} />
 						<ListItemText
-							primary={formData.hypoallergenic ? 'Yes' : 'No'}
+							primary={formData.hypoallergenic ? t('yes') : t('no')}
 							primaryTypographyProps={{ textAlign: 'right' }}
 						/>
 					</ListItem>
@@ -110,7 +112,7 @@ export default function Review({ formData }: any) {
 						<ListItemIcon>
 							<NoFoodIcon />
 						</ListItemIcon>
-						<ListItemText primary='Dietary Restrictions' />
+						<ListItemText primary={t('para-dietary-restrictions')} />
 						<ListItemText
 							primary={formData.dietary_restrictions}
 							primaryTypographyProps={{ textAlign: 'right' }}
@@ -131,4 +133,3 @@ const style = {
 	alignItems: 'center',
 	minWidth: '50%',
 };
-

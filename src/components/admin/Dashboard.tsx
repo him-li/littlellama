@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -55,6 +56,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 }));
 
 export default function Dashboard({ user }: any) {
+	const { t } = useTranslation();
 	const theme = useTheme();
 	const router = useRouter();
 	const [value, setValue] = useState(0);
@@ -135,8 +137,8 @@ export default function Dashboard({ user }: any) {
 					variant='fullWidth'
 					style={{ backgroundColor: 'teal' }}
 				>
-					<Tab label='Users' {...a11yProps(0)} />
-					<Tab label='Pets' {...a11yProps(1)} />
+					<Tab label={t('users')} {...a11yProps(0)} />
+					<Tab label={t('pets')} {...a11yProps(1)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0} dir={theme.direction}>
@@ -160,21 +162,21 @@ export default function Dashboard({ user }: any) {
 									<AccordionDetails>
 										<List>
 											<ListItem sx={{ justifyContent: 'space-between' }}>
-												<ListItemText primary='Email Address' />
+											<ListItemText primary={t('para-email')} />
 												<ListItemText align='right' primary={user.email} />
 											</ListItem>
 											<ListItem sx={{ justifyContent: 'space-between' }}>
-												<ListItemText primary='Phone Number' />
+											<ListItemText primary={t('para-phone')} />
 												<ListItemText primary={user.phone} />
 											</ListItem>
 											{user.bio && (
 												<ListItem sx={{ justifyContent: 'space-between' }}>
-													<ListItemText primary='Bio' />
+												<ListItemText primary={t('para-bio')} />
 													<ListItemText primary={user.bio} />
 												</ListItem>
 											)}
 											<ListItem sx={{ justifyContent: 'space-between' }}>
-												<ListItemText primary='Pets Owned' />
+											<ListItemText primary={t('pets-owned')} />
 												<ListItemText
 													primary={user.owned_pets.map((pet, index) => (
 														<Link underline='none' color='inherit' key={index}>
@@ -185,7 +187,7 @@ export default function Dashboard({ user }: any) {
 												/>
 											</ListItem>
 											<ListItem sx={{ justifyContent: 'space-between' }}>
-												<ListItemText primary='Pets Saved' />
+											<ListItemText primary={t('pets-saved')} />
 												<ListItemText
 													primary={user.saved_pets.map((pet, index) => (
 														<Link underline='none' color='inherit' key={index}>
@@ -209,4 +211,3 @@ export default function Dashboard({ user }: any) {
 		</Box>
 	);
 }
-

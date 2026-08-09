@@ -216,7 +216,7 @@ export default function Signup({ open, handleClose }: any) {
 										control={
 											<Checkbox value='allowExtraEmails' color='secondary' />
 										}
-										label='I want to receive inspiration, marketing promotions and updates via email.'
+										label={t('marketing-opt-in')}
 									/>
 								</Grid>
 							</Grid>
@@ -242,7 +242,7 @@ export default function Signup({ open, handleClose }: any) {
 							<Grid container sx={{ justifyContent: 'flex-end' }}>
 								<Grid size='auto'>
 									<Link href='#' variant='body2'>
-										Already have an account? Sign in
+									{t('already-account')}
 									</Link>
 								</Grid>
 							</Grid>
@@ -256,7 +256,7 @@ export default function Signup({ open, handleClose }: any) {
 				onClose={handleCloseAlert}
 			>
 				<Alert onClose={handleCloseAlert} severity='success'>
-					Welcome to join the Little Llama {firstName}!
+					{t('message-signup-success', { name: firstName })}
 				</Alert>
 			</Snackbar>
 			<Snackbar
@@ -265,7 +265,7 @@ export default function Signup({ open, handleClose }: any) {
 				onClose={handleCloseAlert}
 			>
 				<Alert onClose={handleCloseAlert} severity='error'>
-					Oops! Something went wrong. Please try to sign up again later.
+					{t('message-signup-error')}
 				</Alert>
 			</Snackbar>
 		</React.Fragment>

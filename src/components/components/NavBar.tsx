@@ -47,7 +47,7 @@ export default function Navbar({ user }: { user: User | null }) {
 
 					{user?.admin && (
 						<>
-							<Tooltip title='Admin pages'>
+							<Tooltip title={t('admin-pages')}>
 								<IconButton onClick={(event: MouseEvent<HTMLElement>) => setAdminAnchor(event.currentTarget)} sx={{ ml: { xs: 'auto', md: 1 }, border: '1px solid', borderColor: 'divider' }}>
 									<Avatar sx={{ width: 34, height: 34, bgcolor: 'secondary.main', color: 'secondary.contrastText' }}><AdminPanelSettingsRoundedIcon fontSize='small' /></Avatar>
 								</IconButton>
@@ -59,7 +59,7 @@ export default function Navbar({ user }: { user: User | null }) {
 						</>
 					)}
 
-					<IconButton aria-label='Open navigation' onClick={(event: MouseEvent<HTMLElement>) => setNavAnchor(event.currentTarget)} sx={{ ml: user?.admin ? 0 : 'auto', display: { md: 'none' } }}>
+					<IconButton aria-label={t('open-navigation')} onClick={(event: MouseEvent<HTMLElement>) => setNavAnchor(event.currentTarget)} sx={{ ml: user?.admin ? 0 : 'auto', display: { md: 'none' } }}>
 						<MenuRoundedIcon />
 					</IconButton>
 					<Menu anchorEl={navAnchor} open={Boolean(navAnchor)} onClose={() => setNavAnchor(null)} PaperProps={{ sx: { minWidth: 210, mt: 1 } }}>

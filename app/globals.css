@@ -2,8 +2,14 @@
 * { box-sizing: border-box; }
 html { min-height: 100%; scroll-behavior: smooth; }
 body { margin: 0; min-height: 100%; background: #fbfaf6; color: #18201f; }
-html[lang='he'] body { font-family: var(--font-heebo), Arial, sans-serif; }
+html[lang='zh_hans'] body, html[lang='zh'] body { font-family: var(--font-cjk-sc), Arial, sans-serif; }
+html[lang='zh_hant'] body { font-family: var(--font-cjk-tc), Arial, sans-serif; }
+html[lang='he'] body { font-family: var(--font-hebrew), Arial, sans-serif; }
 html[lang='ar'] body { font-family: var(--font-arabic), Arial, sans-serif; }
+html[lang='zh_hans'] :is(.MuiTypography-h1,.MuiTypography-h2,.MuiTypography-h3,.MuiTypography-h4), html[lang='zh'] :is(.MuiTypography-h1,.MuiTypography-h2,.MuiTypography-h3,.MuiTypography-h4) { font-family: var(--font-cjk-sc), Arial, sans-serif; }
+html[lang='zh_hant'] :is(.MuiTypography-h1,.MuiTypography-h2,.MuiTypography-h3,.MuiTypography-h4) { font-family: var(--font-cjk-tc), Arial, sans-serif; }
+html[lang='he'] :is(.MuiTypography-h1,.MuiTypography-h2,.MuiTypography-h3,.MuiTypography-h4) { font-family: var(--font-hebrew), Arial, sans-serif; }
+html[lang='ar'] :is(.MuiTypography-h1,.MuiTypography-h2,.MuiTypography-h3,.MuiTypography-h4) { font-family: var(--font-arabic), Arial, sans-serif; }
 html[dir='rtl'] .MuiButton-startIcon { margin-left: 8px; margin-right: -4px; }
 html[dir='rtl'] .MuiButton-endIcon { margin-left: -4px; margin-right: 8px; }
 img { display: block; max-width: 100%; }

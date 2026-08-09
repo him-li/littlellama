@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Card, CardContent, Chip, Stack, Typography } from '@/src/ui/mui';
 import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
 import PetsRoundedIcon from '@mui/icons-material/PetsRounded';
@@ -8,12 +9,13 @@ import type { Pet, User } from '../../../types/models';
 interface PetsListProps { petsData: Pet[]; hide?: boolean; status?: boolean; display?: boolean; user: User | null; }
 
 export default function PetsList({ petsData, hide = false, status = false, user }: PetsListProps) {
+	const { t } = useTranslation();
 	const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
 	if (!petsData.length) return (
 		<Stack spacing={1.5} sx={{ py: 8, px: 2, alignItems: 'center', border: '1px dashed', borderColor: 'divider', borderRadius: 4, bgcolor: 'background.paper' }}>
 			<PetsRoundedIcon color='primary' sx={{ fontSize: 44 }} />
-			<Typography variant='h4'>No pets to show yet</Typography>
-			<Typography color='text.secondary'>Try another search or check back soon.</Typography>
+			<Typography variant='h4'>{t('empty-pets-title')}</Typography>
+			<Typography color='text.secondary'>{t('empty-pets-body')}</Typography>
 		</Stack>
 	);
 	return (

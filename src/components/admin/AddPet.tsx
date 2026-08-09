@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import {
 	Avatar,
 	Box,
@@ -17,9 +18,9 @@ import AddImage from './components/AddImage';
 import Review from './components/Review';
 import littleLlama from '../../assets/littleLlama.png';
 
-const steps = ['Add Information', 'Upload Picture', 'Review Details'];
-
 export default function AddPet({ user }: any) {
+	const { t } = useTranslation();
+	const steps = [t('step-add-info'), t('step-upload-picture'), t('step-review')];
 	const router = useRouter();
 	const [activeStep, setActiveStep] = useState(0);
 	const [formData, setFormData] = useState({
@@ -171,7 +172,7 @@ export default function AddPet({ user }: any) {
 									}
 									sx={{ mt: 3, ml: 1 }}
 								>
-									{activeStep === steps.length - 1 ? 'Add Pet' : 'Next'}
+									{activeStep === steps.length - 1 ? t('link-addpet') : t('action-next')}
 								</Button>
 							</Box>
 						</React.Fragment>

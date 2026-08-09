@@ -5,8 +5,10 @@ import {
 	FormControlLabel,
 	Checkbox,
 } from '@/src/ui/mui';
+import { useTranslation } from 'react-i18next';
 
 export default function AddInfo({ formData, setFormData }: any) {
+	const { t } = useTranslation();
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
@@ -29,9 +31,9 @@ export default function AddInfo({ formData, setFormData }: any) {
 					value={formData.type}
 					onChange={handleChange}
 				>
-					<option disabled>Type</option>
-					<option value={'Cat'}>Cat</option>
-					<option value={'Dog'}>Dog</option>
+					<option disabled>{t('para-type')}</option>
+					<option value={'Cat'}>{t('para-cat')}</option>
+					<option value={'Dog'}>{t('para-dog')}</option>
 				</NativeSelect>
 			</Grid>
 			<Grid item xs={12} sm={4}>
@@ -46,9 +48,9 @@ export default function AddInfo({ formData, setFormData }: any) {
 					value={formData.breed}
 					onChange={handleChange}
 				>
-					<option disabled>Breed</option>
+					<option disabled>{t('para-breed')}</option>
 					{formData.type === '' ? (
-						<option disabled>Please select type</option>
+						<option disabled>{t('select-type-first')}</option>
 					) : formData.type === 'Cat' ? (
 						catBreeds.map((breed, index) => (
 							<option key={index} value={breed}>
@@ -69,7 +71,7 @@ export default function AddInfo({ formData, setFormData }: any) {
 					required
 					id='name'
 					name='name'
-					label='Name'
+					label={t('para-name')}
 					type='text'
 					fullWidth
 					color='secondary'
@@ -91,10 +93,10 @@ export default function AddInfo({ formData, setFormData }: any) {
 					value={formData.adoption_status}
 					onChange={handleChange}
 				>
-					<option disabled>Adoption Status</option>
-					<option value={'Adopted'}>Adopted</option>
-					<option value={'Fostered'}>Fostered</option>
-					<option value={'Available'}>Available</option>
+					<option disabled>{t('para-adoption-status')}</option>
+					<option value={'Adopted'}>{t('para-adopted')}</option>
+					<option value={'Fostered'}>{t('para-fostered')}</option>
+					<option value={'Available'}>{t('para-available')}</option>
 				</NativeSelect>
 			</Grid>
 			<Grid item xs={12} sm={4}>
@@ -102,7 +104,7 @@ export default function AddInfo({ formData, setFormData }: any) {
 					required
 					id='weight'
 					name='weight'
-					label='Weight (kg)'
+					label={t('weight-kg')}
 					type='number'
 					fullWidth
 					autoComplete='Weight'
@@ -117,7 +119,7 @@ export default function AddInfo({ formData, setFormData }: any) {
 					required
 					id='height'
 					name='height'
-					label='Height (cm)'
+					label={t('height-cm')}
 					type='number'
 					fullWidth
 					autoComplete='Height'
@@ -137,7 +139,7 @@ export default function AddInfo({ formData, setFormData }: any) {
 							onChange={handleCheckboxChange}
 						/>
 					}
-					label='Hypoallergenic'
+					label={t('para-hypoallergenic')}
 					sx={{ width: '100%' }}
 				/>
 			</Grid>
@@ -146,7 +148,7 @@ export default function AddInfo({ formData, setFormData }: any) {
 					required
 					id='color'
 					name='color'
-					label='Color'
+					label={t('para-color')}
 					type='text'
 					fullWidth
 					autoComplete='Color'
@@ -160,7 +162,7 @@ export default function AddInfo({ formData, setFormData }: any) {
 				<TextField
 					id='dietary_restrictions'
 					name='dietary_restrictions'
-					label='Dietary Restrictions'
+					label={t('para-dietary-restrictions')}
 					type='text'
 					fullWidth
 					color='secondary'
@@ -173,7 +175,7 @@ export default function AddInfo({ formData, setFormData }: any) {
 				<TextField
 					id='bio'
 					name='bio'
-					label='Bio'
+					label={t('para-bio')}
 					type='textarea'
 					fullWidth
 					color='secondary'
@@ -595,4 +597,3 @@ const dogBreeds = [
 	'Yorkshire Terrier',
 	'Zuchon',
 ];
-

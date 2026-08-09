@@ -39,7 +39,7 @@ export default function Home({ user }: { user: User | null }) {
 				<Container maxWidth='lg' sx={{ position: 'relative' }}>
 					<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(0,1.08fr) minmax(360px,.92fr)' }, alignItems: 'center', gap: { xs: 5, md: 8 } }}>
 						<Stack spacing={2.5} sx={{ alignItems: 'flex-start' }}>
-							<Chip icon={<FavoriteRoundedIcon />} label='Adopt • Foster • Love' sx={{ bgcolor: 'rgba(255,255,255,.14)', color: 'white', '& .MuiChip-icon': { color: 'secondary.main' } }} />
+							<Chip icon={<FavoriteRoundedIcon />} label={t('chip-adopt')} sx={{ bgcolor: 'rgba(255,255,255,.14)', color: 'white', '& .MuiChip-icon': { color: 'secondary.main' } }} />
 							<Typography variant='h1' sx={{ fontSize: { xs: '3.5rem', sm: '4.8rem', md: '5.8rem' }, maxWidth: 680 }}>
 								{user ? `${t('heading-hey')} ${user.firstname ?? ''}!` : t('heading-little-llama')}
 							</Typography>
@@ -61,13 +61,13 @@ export default function Home({ user }: { user: User | null }) {
 			<Box component='section' sx={{ py: { xs: 7, md: 10 } }}>
 				<Container maxWidth='lg'>
 					<Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 4, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'flex-end' } }}>
-						<Box><Typography color='primary.main' fontWeight={800} sx={{ mb: .5 }}>MEET YOUR NEW FRIEND</Typography><Typography variant='h2' sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' } }}>{t('heading-petlist-home')}</Typography></Box>
+						<Box><Typography color='primary.main' fontWeight={800} sx={{ mb: .5 }}>{t('heading-meet-friend')}</Typography><Typography variant='h2' sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' } }}>{t('heading-petlist-home')}</Typography></Box>
 						<Button href='/search' variant='outlined' startIcon={<SearchRoundedIcon />}>{t('text-search')}</Button>
 					</Stack>
 					<PetsList petsData={petsData.slice(0, 6)} hide user={user} />
 				</Container>
 			</Box>
-			<Snackbar open={openSuccess} autoHideDuration={4000} onClose={closeAlert}><Alert onClose={closeAlert} severity='success'>You have been successfully logged out.</Alert></Snackbar>
+			<Snackbar open={openSuccess} autoHideDuration={4000} onClose={closeAlert}><Alert onClose={closeAlert} severity='success'>{t('message-logout-success')}</Alert></Snackbar>
 		</>
 	);
 }
