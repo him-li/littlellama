@@ -19,7 +19,7 @@ export default function Footer() {
 						<Typography variant='body2' color='text.secondary'>© {new Date().getFullYear()} {t('para-xin')}</Typography>
 					</Box>
 					<TextField select size='small' value={language} onChange={chooseLanguage} label='Language' sx={{ minWidth: 170 }}>
-						<MenuItem value='en'>English</MenuItem><MenuItem value='zh_hans'>简体中文</MenuItem><MenuItem value='zh_hant'>正體中文</MenuItem><MenuItem value='he'>עברית</MenuItem>
+						<MenuItem value='en'>English</MenuItem><MenuItem value='zh_hans'>简体中文</MenuItem><MenuItem value='zh_hant'>正體中文</MenuItem><MenuItem value='he'>עברית</MenuItem><MenuItem value='ar'>العربية</MenuItem>
 					</TextField>
 				</Stack>
 			</Container>
