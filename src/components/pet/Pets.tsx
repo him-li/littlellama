@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react';
-import { Box, Grid, Typography } from '@/src/ui/mui';
+import { useEffect, useState } from 'react';
+import { Box, Container, Stack, Typography } from '@/src/ui/mui';
 import { GET } from '../../utils/api';
 import PetsList from './components/PetsList';
 import walkingLlama from '../../assets/walkingllama.png';
@@ -8,66 +7,16 @@ import type { Pet, User } from '../../types/models';
 
 export default function Pets({ user }: { user: User | null }) {
 	const [petsData, setPetsData] = useState<Pet[]>([]);
-	const userData = user;
-	console.log(userData);
-	useEffect(() => {
-		const fetchPetsData = async () => {
-			try {
-				console.log(user);
-				if (user) {
-					console.log(user.id);
-					const pets = await GET<Pet[]>('/pet/', { id: user.id });
-					console.log(pets);
-					setPetsData(pets);
-				} else {
-					const pets = await GET<Pet[]>('/pet');
-					console.log(pets);
-					setPetsData(pets);
-				}
-			} catch (error) {
-				console.error('Error fetching pets data:', error);
-			}
-		};
-		fetchPetsData();
-	}, [user]);
-
+	useEffect(() => { void GET<Pet[]>('/pet').then(setPetsData).catch(console.error); }, []);
 	return (
-		<Box component='center'>
-			<Box sx={{ backgroundColor: 'teal' }} minHeight='25vh'>
-				<Grid container maxWidth='md' gap={4} justifyContent='space-between'>
-					<Grid item xs={6} md={6} m={4} gap={2}>
-						<Typography
-							variant='h3'
-							fontFamily='Markazi Text'
-							align='left'
-							color='secondary'
-						>
-							All Little Llamas for You!
-						</Typography>
-						<Typography align='left' paragraph>
-							Welcome to Little Llama, your hub for adorable pets! Explore cats
-							and dogs, click to view details, and choose <b>Adopt</b> or
-							<b>Foster</b> Owners can <b>return</b> pets; others, adopt or
-							foster. Save favorites with a click. Start your journey with us!
-							🐾
-						</Typography>
-					</Grid>
-					<Grid item flexGrow={1} xs='auto' md={4} position='relative'>
-						<img
-							src={walkingLlama.src}
-							width='100%'
-							style={{
-								borderRadius: 5,
-								boxShadow: 'revert',
-								position: 'absolute',
-								top: '0',
-								left: '0',
-							}}
-						/>
-					</Grid>
-				</Grid>
+		<>
+			<Box sx={{ bgcolor: 'primary.light', overflow: 'hidden', py: { xs: 5, md: 7 } }}>
+				<Container maxWidth='lg'><Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1.35fr .65fr' }, alignItems: 'center', gap: 4 }}>
+					<Stack spacing={1.5}><Typography color='primary.main' fontWeight={800}>OUR PETS</Typography><Typography variant='h1' sx={{ fontSize: { xs: '3.3rem', md: '4.6rem' } }}>All Little Llamas for You</Typography><Typography color='text.secondary' sx={{ maxWidth: 680, fontSize: '1.06rem' }}>Explore cats and dogs looking for their next chapter. Open a profile to learn their story, then adopt, foster, or save a favorite.</Typography></Stack>
+					<Box component='img' src={walkingLlama.src} alt='' sx={{ justifySelf: 'center', width: { xs: 210, md: 300 }, maxHeight: 250, objectFit: 'contain' }} />
+				</Box></Container>
 			</Box>
-			<PetsList petsData={petsData} user={user} />
-		</Box>
+			<Container maxWidth='lg' sx={{ py: { xs: 6, md: 9 } }}><PetsList petsData={petsData} user={user} /></Container>
+		</>
 	);
 }

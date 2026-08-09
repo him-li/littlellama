@@ -169,12 +169,12 @@ export default function Login({ open, handleClose }: any) {
 								{t('button-login')}
 							</Button>
 							<Grid container>
-								<Grid item xs>
+								<Grid size='grow'>
 									<Link href='#' variant='body2'>
 										Forgot password?
 									</Link>
 								</Grid>
-								<Grid item>
+								<Grid size='auto'>
 									<Link href='#' variant='body2' color='secondary'>
 										{"Don't have an account? Sign Up"}
 									</Link>

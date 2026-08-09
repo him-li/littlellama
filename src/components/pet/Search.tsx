@@ -1,225 +1,42 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-	Box,
-	Stack,
-	Typography,
-	Button,
-	InputBase,
-	FormControlLabel,
-	Checkbox,
-	NativeSelect,
-} from '@/src/ui/mui';
-import SearchIcon from '@mui/icons-material/Search';
-import { styled, alpha } from '@mui/material/styles';
+import { Box, Button, Checkbox, Container, FormControlLabel, MenuItem, Paper, Stack, TextField, Typography } from '@/src/ui/mui';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import PetsList from './components/PetsList';
 import { GET } from '../../utils/api';
 import type { Pet, User } from '../../types/models';
 
+type SearchParams = { type: string; adoption_status: string; height: boolean; weight: boolean; name: string };
+const initialParams: SearchParams = { type: '', adoption_status: '', height: false, weight: false, name: '' };
+
 export default function Search({ user }: { user: User | null }) {
 	const { t } = useTranslation();
-	const [isAdvancedSearch, setIsAdvancedSearch] = useState(false);
+	const [advanced, setAdvanced] = useState(false);
 	const [petsData, setPetsData] = useState<Pet[]>([]);
-	const [searchParams, setSearchParams] = useState({
-		type: '',
-		adoption_status: '',
-		height: false,
-		weight: false,
-		name: '',
-	});
-	const [searchButtonClicked, setSearchButtonClicked] = useState(false);
-
-	const fetchPetsData = async () => {
-		try {
-			const queryParams = buildQueryParams(searchParams);
-			const res = await GET<Pet[]>(`/pet${queryParams}`);
-			console.log(res);
-			setPetsData(res);
-		} catch (error) {
-			console.error('Error fetching pets data:', error);
-		}
+	const [params, setParams] = useState(initialParams);
+	const [searched, setSearched] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const change = (event: ChangeEvent<HTMLInputElement>) => setParams((current) => ({ ...current, [event.target.name]: event.target.type === 'checkbox' ? event.target.checked : event.target.value }));
+	const search = async () => {
+		setLoading(true); setSearched(true);
+		const query = new URLSearchParams();
+		Object.entries(params).forEach(([key, value]) => { if (value !== '' && (!['height', 'weight'].includes(key) || value)) query.set(key, String(value)); });
+		try { setPetsData(await GET<Pet[]>(`/pet${query.size ? `?${query}` : ''}`)); } catch (error) { console.error(error); setPetsData([]); } finally { setLoading(false); }
 	};
-
-	const buildQueryParams = (params) => {
-		const queryParams = [];
-		for (const key in params) {
-			if (params[key] !== '') {
-				if (typeof params[key] === 'boolean') {
-					queryParams.push(`${key}=${params[key]}`);
-				} else {
-					queryParams.push(`${key}=${encodeURIComponent(params[key])}`);
-				}
-			}
-		}
-		console.log(queryParams);
-		return queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
-	};
-
-	const handleInputChange = (e) => {
-		const { name, value, type, checked } = e.target;
-		setSearchParams((prevParams) => ({
-			...prevParams,
-			[name]: type === 'checkbox' ? checked : value,
-		}));
-	};
-
-	const handleSearch = async () => {
-		setSearchButtonClicked(true);
-		await fetchPetsData();
-	};
-
 	return (
-		<Box component='center' height='100%'>
-			<Box sx={{ backgroundColor: 'teal' }}>
-				<Stack maxWidth='md' padding={10} gap={5} justifyContent='center'>
-					<Typography variant='h2' color='secondary' fontFamily='Markazi Text'>
-						Find Your Little Llama
-					</Typography>
-					<SearchBar>
-						<SearchIconWrapper>
-							<SearchIcon />
-						</SearchIconWrapper>
-						<StyledInputBase
-							placeholder={
-								isAdvancedSearch
-									? `${t('text-advanced-search')}`
-									: `${t('text-search')}…`
-							}
-							inputProps={{ 'aria-label': 'search' }}
-							name='name'
-							value={searchParams.name}
-							onChange={handleInputChange}
-						/>
-						<Button
-							variant='contained'
-							color='secondary'
-							style={{
-								right: 0,
-								position: 'absolute',
-								top: 0,
-								bottom: 0,
-								margin: '0',
-							}}
-							onClick={handleSearch}
-						>
-							{t('text-search')}
-						</Button>
-					</SearchBar>
-					<Stack direction='row' spacing={1} justifyContent='center'>
-						<FormControlLabel
-							control={
-								<Checkbox
-									color='secondary'
-									name='advancedSearch'
-									checked={isAdvancedSearch}
-									onChange={() => setIsAdvancedSearch(!isAdvancedSearch)}
-								/>
-							}
-							label={
-								isAdvancedSearch
-									? `${t('text-advanced-search')}`
-									: 'Enable Advanced Search'
-							}
-						/>
-						<NativeSelect
-							defaultValue='Type'
-							inputProps={{
-								name: 'type',
-								id: 'type',
-							}}
-							onChange={handleInputChange}
-						>
-							<option disabled>{t('para-type')}</option>
-							<option value={'Cat'}>{t('para-cat')}</option>
-							<option value={'Dog'}>{t('para-dog')}</option>
-						</NativeSelect>
-						{isAdvancedSearch && (
-							<Stack direction='row' spacing={2}>
-								{' '}
-								<NativeSelect
-									defaultValue='Adoption Status'
-									inputProps={{
-										name: 'adoption_status',
-										id: 'adoption_status',
-									}}
-									onChange={handleInputChange}
-								>
-									<option disabled>{t('para-adoption-status')}</option>
-									<option value={'Adopted'}>{t('para-adopted')}</option>
-									<option value={'Fostered'}>{t('para-fostered')}</option>
-									<option value={'Available'}>{t('para-available')}</option>
-								</NativeSelect>
-								<FormControlLabel
-									control={
-										<Checkbox
-											color='secondary'
-											name='height'
-											value={searchParams.height}
-											onChange={handleInputChange}
-										/>
-									}
-									label={t('para-height')}
-								/>
-								<FormControlLabel
-									control={
-										<Checkbox
-											color='secondary'
-											name='weight'
-											value={searchParams.weight}
-											onChange={handleInputChange}
-										/>
-									}
-									label={t('para-weight')}
-								/>
-							</Stack>
-						)}
-					</Stack>
+		<>
+			<Box sx={{ bgcolor: 'primary.dark', color: 'white', py: { xs: 6, md: 9 } }}><Container maxWidth='md'><Stack spacing={1.5} sx={{ alignItems: 'center', textAlign: 'center' }}><Typography color='secondary.light' fontWeight={800}>FIND THE ONE</Typography><Typography variant='h1' sx={{ fontSize: { xs: '3.4rem', md: '5rem' } }}>Find Your Little Llama</Typography><Typography sx={{ color: 'rgba(255,255,255,.75)', maxWidth: 590 }}>Search by name or refine the details to meet a pet that fits your home.</Typography></Stack></Container></Box>
+		<Container maxWidth='md' sx={{ mt: { xs: -3, md: -4 }, position: 'relative', pb: 8 }}>
+			<Paper elevation={0} sx={{ p: { xs: 2, md: 3 }, border: '1px solid', borderColor: 'divider', boxShadow: '0 20px 50px rgba(24,32,31,.1)' }}>
+				<Stack spacing={2}>
+					<Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}><TextField fullWidth name='name' value={params.name} onChange={change} label={t('text-search')} placeholder='Pet name' /><TextField select name='type' value={params.type} onChange={change} label={t('para-type')} sx={{ minWidth: 150 }}><MenuItem value=''>Any</MenuItem><MenuItem value='Cat'>{t('para-cat')}</MenuItem><MenuItem value='Dog'>{t('para-dog')}</MenuItem></TextField><Button variant='contained' onClick={() => void search()} startIcon={<SearchRoundedIcon />} disabled={loading}>{loading ? 'Searching…' : t('text-search')}</Button></Stack>
+					<Button onClick={() => setAdvanced((value) => !value)} startIcon={<TuneRoundedIcon />} sx={{ alignSelf: 'flex-start' }}>{advanced ? 'Hide filters' : t('text-advanced-search')}</Button>
+					{advanced && <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ alignItems: { sm: 'center' } }}><TextField select name='adoption_status' value={params.adoption_status} onChange={change} label={t('para-adoption-status')} sx={{ minWidth: 190 }}><MenuItem value=''>Any status</MenuItem><MenuItem value='Adopted'>{t('para-adopted')}</MenuItem><MenuItem value='Fostered'>{t('para-fostered')}</MenuItem><MenuItem value='Available'>{t('para-available')}</MenuItem></TextField><FormControlLabel control={<Checkbox name='height' checked={params.height} onChange={change} />} label={t('para-height')} /><FormControlLabel control={<Checkbox name='weight' checked={params.weight} onChange={change} />} label={t('para-weight')} /></Stack>}
 				</Stack>
-			</Box>
-			{searchButtonClicked && (
-				<PetsList petsData={petsData} user={user} display={true} />
-			)}
-		</Box>
+			</Paper>
+			{searched && <Box sx={{ mt: 6 }}><Typography variant='h2' sx={{ fontSize: { xs: '2.6rem', md: '3.5rem' }, mb: 3 }}>Search results</Typography><PetsList petsData={petsData} user={user} /></Box>}
+		</Container>
+		</>
 	);
 }
-
-const SearchBar = styled('div')(({ theme }) => ({
-	position: 'relative',
-	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.15),
-	'&:hover': {
-		backgroundColor: alpha(theme.palette.common.white, 0.25),
-	},
-	marginLeft: 0,
-	width: '100%',
-	[theme.breakpoints.up('sm')]: {
-		marginLeft: theme.spacing(1),
-		width: 'auto',
-	},
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-	padding: theme.spacing(0, 2),
-	height: '100%',
-	position: 'absolute',
-	pointerEvents: 'none',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-	color: 'inherit',
-	'& .MuiInputBase-input': {
-		padding: theme.spacing(1, 1, 1, 0),
-		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-		transition: theme.transitions.create('width'),
-		width: '100%',
-		[theme.breakpoints.up('sm')]: {
-			width: '12ch',
-			'&:focus': {
-				width: '20ch',
-			},
-		},
-	},
-}));

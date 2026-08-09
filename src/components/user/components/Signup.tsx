@@ -115,7 +115,7 @@ export default function Signup({ open, handleClose }: any) {
 						</Typography>
 						<Box component='form' noValidate sx={{ mt: 3 }}>
 							<Grid container spacing={2}>
-								<Grid item xs={12} sm={6}>
+								<Grid size={{ xs: 12, sm: 6 }}>
 									<TextField
 										autoComplete='given-name'
 										name='firstName'
@@ -129,7 +129,7 @@ export default function Signup({ open, handleClose }: any) {
 										value={firstName}
 									/>
 								</Grid>
-								<Grid item xs={12} sm={6}>
+								<Grid size={{ xs: 12, sm: 6 }}>
 									<TextField
 										required
 										color='secondary'
@@ -142,7 +142,7 @@ export default function Signup({ open, handleClose }: any) {
 										value={lastName}
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								<Grid size={12}>
 									<TextField
 										required
 										color='secondary'
@@ -165,7 +165,7 @@ export default function Signup({ open, handleClose }: any) {
 										}
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								<Grid size={12}>
 									<TextField
 										color='secondary'
 										fullWidth
@@ -178,7 +178,7 @@ export default function Signup({ open, handleClose }: any) {
 										value={phone}
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								<Grid size={12}>
 									<TextField
 										required
 										color='secondary'
@@ -192,7 +192,7 @@ export default function Signup({ open, handleClose }: any) {
 										value={password}
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								<Grid size={12}>
 									<TextField
 										required
 										color='secondary'
@@ -211,7 +211,7 @@ export default function Signup({ open, handleClose }: any) {
 										}
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								<Grid size={12}>
 									<FormControlLabel
 										control={
 											<Checkbox value='allowExtraEmails' color='secondary' />
@@ -239,8 +239,8 @@ export default function Signup({ open, handleClose }: any) {
 							>
 								{t('button-signup')}
 							</Button>
-							<Grid container justifyContent='flex-end'>
-								<Grid item>
+							<Grid container sx={{ justifyContent: 'flex-end' }}>
+								<Grid size='auto'>
 									<Link href='#' variant='body2'>
 										Already have an account? Sign in
 									</Link>

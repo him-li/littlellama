@@ -1,110 +1,38 @@
 import { useState } from 'react';
-import {
-	Box,
-	Card,
-	CardActions,
-	Stack,
-	Typography,
-	IconButton,
-} from '@/src/ui/mui';
-import Masonry from '@mui/lab/Masonry';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Box, Button, Card, CardContent, Chip, Stack, Typography } from '@/src/ui/mui';
+import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
+import PetsRoundedIcon from '@mui/icons-material/PetsRounded';
 import PetDetails from './PetDetails';
 import type { Pet, User } from '../../../types/models';
 
-interface PetsListProps {
-	petsData: Pet[];
-	hide?: boolean;
-	status?: boolean;
-	display?: boolean;
-	user: User | null;
-}
+interface PetsListProps { petsData: Pet[]; hide?: boolean; status?: boolean; display?: boolean; user: User | null; }
 
-export default function PetsList({ petsData, hide, status, user }: PetsListProps) {
-	const [selectedPetId, setSelectedPetId] = useState(null);
-	const [open, setOpen] = useState(false);
-
-	const handleOpenDetails = (petId) => {
-		setSelectedPetId(petId);
-		setOpen(true);
-	};
+export default function PetsList({ petsData, hide = false, status = false, user }: PetsListProps) {
+	const [selectedPetId, setSelectedPetId] = useState<string | null>(null);
+	if (!petsData.length) return (
+		<Stack spacing={1.5} sx={{ py: 8, px: 2, alignItems: 'center', border: '1px dashed', borderColor: 'divider', borderRadius: 4, bgcolor: 'background.paper' }}>
+			<PetsRoundedIcon color='primary' sx={{ fontSize: 44 }} />
+			<Typography variant='h4'>No pets to show yet</Typography>
+			<Typography color='text.secondary'>Try another search or check back soon.</Typography>
+		</Stack>
+	);
 	return (
-		<Box
-			flex
-			flexDirection='column'
-			maxWidth='md'
-			m={8}
-			height='100%'
-			justifyContent='center'
-		>
-			<Masonry columns={3} spacing={2}>
-				{petsData.map((pet, index) => (
-					<Card
-						key={index}
-						style={{
-							borderRadius: '5px',
-							boxShadow: '0 0 10px 0 rgba(0,0,0,0.5)',
-						}}
-					>
-						<PetDetails
-							open={open && selectedPetId === pet.id}
-							handleClose={() => setOpen(false)}
-							petId={pet.id}
-							user={user}
-						/>
-						<img
-							srcSet={`${pet.picture}?w=162&auto=format&dpr=2 2x`}
-							src={`${pet.picture}?w=162&auto=format`}
-							alt={pet.name}
-							width='100%'
-							style={{
-								display: 'block',
-								borderRadius: '5px',
-							}}
-						/>
-						<CardActions
-							sx={{
-								display: 'flex',
-								p: 0,
-								justifyContent: 'space-between',
-								alignItems: 'center',
-								position: 'relative',
-							}}
-						>
-							<img
-								src={pet.picture}
-								width='100%'
-								height='100%'
-								style={{
-									position: 'absolute',
-									filter: 'blur(25px)',
-								}}
-							/>
-							<Stack zIndex={1} p={2}>
-								<Typography align='left' variant='h5'>
-									{pet.name}
-								</Typography>
-								<Typography align='left'>
-									{pet.breed + ' ' + pet.type}
-								</Typography>
-								{status && (
-									<Typography align='left'>{pet.adoption_status}</Typography>
-								)}
-							</Stack>
-							{!hide && (
-								<IconButton
-									onClick={() => handleOpenDetails(pet.id)}
-									sx={{
-										padding: '1rem',
-									}}
-								>
-									<VisibilityIcon />
-								</IconButton>
-							)}
-						</CardActions>
-					</Card>
-				))}
-			</Masonry>
+		<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2,minmax(0,1fr))', lg: 'repeat(3,minmax(0,1fr))' }, gap: { xs: 2, md: 3 } }}>
+			{petsData.map((pet) => (
+				<Card key={pet.id} elevation={0} sx={{ overflow: 'hidden', borderRadius: 3, bgcolor: 'background.paper', transition: 'transform .25s ease, box-shadow .25s ease', '&:hover': { transform: 'translateY(-5px)', boxShadow: '0 18px 42px rgba(24,32,31,.12)' } }}>
+					<PetDetails open={selectedPetId === pet.id} handleClose={() => setSelectedPetId(null)} petId={pet.id} user={user} />
+					<Box sx={{ position: 'relative', aspectRatio: '4 / 3', bgcolor: 'primary.light', overflow: 'hidden' }}>
+						<Box component='img' src={pet.picture || '/favicon.ico'} alt={pet.name} sx={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .35s ease', '.MuiCard-root:hover &': { transform: 'scale(1.04)' } }} />
+						{status && <Chip label={pet.adoption_status} size='small' color={pet.adoption_status === 'Available' ? 'primary' : 'default'} sx={{ position: 'absolute', top: 14, left: 14, fontWeight: 700 }} />}
+					</Box>
+					<CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
+						<Stack direction='row' spacing={2} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+							<Box sx={{ minWidth: 0 }}><Typography variant='h4' noWrap>{pet.name}</Typography><Typography color='text.secondary' noWrap>{[pet.breed, pet.type].filter(Boolean).join(' · ')}</Typography></Box>
+							{!hide && <Button aria-label={`View ${pet.name}`} onClick={() => setSelectedPetId(pet.id)} variant='outlined' sx={{ minWidth: 44, width: 44, px: 0 }}><ArrowOutwardRoundedIcon /></Button>}
+						</Stack>
+					</CardContent>
+				</Card>
+			))}
 		</Box>
 	);
 }

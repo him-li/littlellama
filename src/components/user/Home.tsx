@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-	Box,
-	Stack,
-	Typography,
-	Button,
-	Link,
-	Grid,
-	Snackbar,
-	Alert,
-} from '@/src/ui/mui';
+import { Alert, Box, Button, Chip, Container, Snackbar, Stack, Typography } from '@/src/ui/mui';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import PetsList from '../pet/components/PetsList';
@@ -24,187 +18,56 @@ export default function Home({ user }: { user: User | null }) {
 	const [openSignup, setOpenSignup] = useState(false);
 	const [openLogin, setOpenLogin] = useState(false);
 	const [openSuccess, setOpenSuccess] = useState(false);
-	const [openError, setOpenError] = useState(false);
 	const [openProfile, setOpenProfile] = useState(false);
 
-	useEffect(() => {
-		fetchPetsData();
-	}, []);
-
-	const fetchPetsData = async () => {
-		try {
-			const res = await GET<Pet[]>('/pet');
-			setPetsData(res);
-		} catch (error) {
-			console.error('Error fetching pets data:', error);
-		}
-	};
-
+	useEffect(() => { void GET<Pet[]>('/pet').then(setPetsData).catch(console.error); }, []);
 	const handleLogout = () => {
 		localStorage.removeItem('USER');
-		console.log(user, localStorage.getItem('USER'));
-		if (localStorage.getItem('USER') === null) {
-			setOpenSuccess(true);
-			setTimeout(() => {
-				window.location.reload();
-			}, 1000);
-		} else {
-			setOpenError(true);
-		}
+		setOpenSuccess(true);
+		window.setTimeout(() => window.location.reload(), 700);
 	};
-
-	const handleCloseAlert = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-		setOpenError(false);
-		setOpenSuccess(false);
-	};
+	const closeAlert = (_event?: SyntheticEvent | Event, reason?: string) => { if (reason !== 'clickaway') setOpenSuccess(false); };
 
 	return (
-		<React.Fragment>
+		<>
 			<Signup open={openSignup} handleClose={() => setOpenSignup(false)} />
 			<Login open={openLogin} handleClose={() => setOpenLogin(false)} />
-			{user && (
-				<ProfileSettings
-					open={openProfile}
-					handleClose={() => setOpenProfile(false)}
-					user={user}
-				/>
-			)}
-			<Box component='center' height='100%'>
-				<Box
-					sx={{ backgroundColor: 'teal' }}
-					minHeight='50vh'
-					display='flex'
-					justifyContent='center'
-					alignItems='center'
-				>
-					<Grid
-						container
-						height='100%'
-						maxWidth='md'
-						padding={2}
-						gap={4}
-						justifyContent='center'
-					>
-						<Grid item xs={6} md={7}>
-							<Stack gap={2}>
-								<Typography
-									variant='h1'
-									fontFamily='Markazi Text'
-									color='secondary'
-									align='left'
-								>
-									{user
-										? `${t('heading-hey')} ${user.firstname}!`
-										: `${t('heading-little-llama')}`}
-								</Typography>
-								<Typography variant='h3' fontFamily='Markazi Text' align='left'>
-									{user
-										? `${t('heading-welcome')}`
-										: `${t('heading-pet-adoption')}`}
-								</Typography>
-								<Typography align='left' paragraph>
-									{t('para-home')}
-								</Typography>
-								{user ? (
-									<Stack direction='row' justifyContent='flex-start' gap={5}>
-										<Button
-											variant='contained'
-											size='large'
-											onClick={() => setOpenProfile(true)}
-											color='secondary'
-										>
-											{t('profile-settings')}
-										</Button>
-										<Button
-											variant='contained'
-											size='large'
-											onClick={handleLogout}
-											color='secondary'
-										>
-											{t('button-logout')}
-										</Button>
-									</Stack>
-								) : (
-									<Stack direction='row' justifyContent='flex-start' gap={5}>
-										<Button
-											variant='contained'
-											size='large'
-											onClick={() => setOpenLogin(true)}
-											color='secondary'
-										>
-											{t('button-login')}
-										</Button>
-										<Button
-											variant='contained'
-											size='large'
-											onClick={() => setOpenSignup(true)}
-											color='secondary'
-										>
-											{t('button-signup')}
-										</Button>
-									</Stack>
-								)}
+			{user && <ProfileSettings open={openProfile} handleClose={() => setOpenProfile(false)} user={user} />}
+
+			<Box component='section' sx={{ position: 'relative', overflow: 'hidden', bgcolor: 'primary.dark', color: 'white', py: { xs: 7, md: 11 } }}>
+				<Box sx={{ position: 'absolute', inset: 0, opacity: .16, backgroundImage: 'radial-gradient(circle at 15% 20%, #fff 0 2px, transparent 3px)', backgroundSize: '34px 34px' }} />
+				<Container maxWidth='lg' sx={{ position: 'relative' }}>
+					<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(0,1.08fr) minmax(360px,.92fr)' }, alignItems: 'center', gap: { xs: 5, md: 8 } }}>
+						<Stack spacing={2.5} sx={{ alignItems: 'flex-start' }}>
+							<Chip icon={<FavoriteRoundedIcon />} label='Adopt • Foster • Love' sx={{ bgcolor: 'rgba(255,255,255,.14)', color: 'white', '& .MuiChip-icon': { color: 'secondary.main' } }} />
+							<Typography variant='h1' sx={{ fontSize: { xs: '3.5rem', sm: '4.8rem', md: '5.8rem' }, maxWidth: 680 }}>
+								{user ? `${t('heading-hey')} ${user.firstname ?? ''}!` : t('heading-little-llama')}
+							</Typography>
+							<Typography variant='h4' sx={{ color: 'secondary.light', fontSize: { xs: '1.8rem', md: '2.3rem' } }}>
+								{user ? t('heading-welcome') : t('heading-pet-adoption')}
+							</Typography>
+							<Typography sx={{ maxWidth: 610, color: 'rgba(255,255,255,.8)', fontSize: { xs: '1rem', md: '1.12rem' } }}>{t('para-home')}</Typography>
+							<Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ pt: 1, width: { xs: '100%', sm: 'auto' } }}>
+								{user ? <><Button variant='contained' color='secondary' onClick={() => setOpenProfile(true)}>{t('profile-settings')}</Button><Button variant='outlined' onClick={handleLogout} sx={{ color: 'white', borderColor: 'rgba(255,255,255,.5)' }}>{t('button-logout')}</Button></> : <><Button variant='contained' color='secondary' onClick={() => setOpenSignup(true)} endIcon={<ArrowForwardRoundedIcon />}>{t('button-signup')}</Button><Button variant='outlined' onClick={() => setOpenLogin(true)} sx={{ color: 'white', borderColor: 'rgba(255,255,255,.5)' }}>{t('button-login')}</Button></>}
 							</Stack>
-						</Grid>
-						<Grid item flexGrow={1} xs='auto' md={4} position='relative'>
-							<img
-								src={heroImage.src}
-								width='100%'
-								style={{
-									borderRadius: 5,
-									boxShadow: '0 0 10px 0 rgba(0,0,0,0.5)',
-									position: 'absolute',
-									top: '50%',
-									left: '0',
-								}}
-							/>
-						</Grid>
-					</Grid>
-				</Box>
-				<Box maxWidth='md' padding={2} m={4} justifyContent='center'>
-					<Stack
-						direction='row'
-						justifyContent='space-evenly'
-						alignItems='center'
-					>
-						<Typography variant='h2' fontFamily='Markazi Text' color='black'>
-							{t('heading-petlist-home')}
-						</Typography>
-						<Button
-							variant='contained'
-							size='large'
-							color='secondary'
-							sx={{ height: '65%' }}
-						>
-							<Link href='/search' underline='none' color='black'>
-								{t('text-search')}
-							</Link>
-						</Button>
-					</Stack>
-					<PetsList petsData={petsData} hide={true} user={user} />
-				</Box>
+						</Stack>
+						<Box sx={{ position: 'relative', '&::before': { content: '""', position: 'absolute', inset: { xs: -12, md: -18 }, border: '1px solid rgba(255,255,255,.22)', borderRadius: '32px', transform: 'rotate(3deg)' } }}>
+							<Box component='img' src={heroImage.src} alt='A happy adopted pet with its family' sx={{ position: 'relative', width: '100%', height: { xs: 330, md: 500 }, objectFit: 'cover', borderRadius: '26px', boxShadow: '0 28px 70px rgba(0,0,0,.3)' }} />
+						</Box>
+					</Box>
+				</Container>
 			</Box>
-			<Snackbar
-				open={openSuccess}
-				autoHideDuration={6000}
-				onClose={handleCloseAlert}
-			>
-				<Alert onClose={handleCloseAlert} severity='success'>
-					You have been successfully logged out!
-				</Alert>
-			</Snackbar>
-			<Snackbar
-				open={openError}
-				autoHideDuration={6000}
-				onClose={handleCloseAlert}
-			>
-				<Alert onClose={handleCloseAlert} severity='error'>
-					Oops! Something went wrong. Please try to log out again later.
-				</Alert>
-			</Snackbar>
-		</React.Fragment>
+
+			<Box component='section' sx={{ py: { xs: 7, md: 10 } }}>
+				<Container maxWidth='lg'>
+					<Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 4, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'flex-end' } }}>
+						<Box><Typography color='primary.main' fontWeight={800} sx={{ mb: .5 }}>MEET YOUR NEW FRIEND</Typography><Typography variant='h2' sx={{ fontSize: { xs: '2.8rem', md: '3.8rem' } }}>{t('heading-petlist-home')}</Typography></Box>
+						<Button href='/search' variant='outlined' startIcon={<SearchRoundedIcon />}>{t('text-search')}</Button>
+					</Stack>
+					<PetsList petsData={petsData.slice(0, 6)} hide user={user} />
+				</Container>
+			</Box>
+			<Snackbar open={openSuccess} autoHideDuration={4000} onClose={closeAlert}><Alert onClose={closeAlert} severity='success'>You have been successfully logged out.</Alert></Snackbar>
+		</>
 	);
 }

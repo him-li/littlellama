@@ -1,5 +1,7 @@
 :root { color-scheme: light; font-synthesis: none; text-rendering: optimizeLegibility; }
 * { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; }
-body { background: #fff; color: #111; }
-img { max-width: 100%; }
+html { min-height: 100%; scroll-behavior: smooth; }
+body { margin: 0; min-height: 100%; background: #fbfaf6; color: #18201f; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+::selection { background: #f6bd3b; color: #18201f; }

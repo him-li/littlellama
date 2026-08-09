@@ -1,64 +1,27 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography, Container, Link, NativeSelect } from '@/src/ui/mui';
+import { Box, Container, MenuItem, Stack, TextField, Typography } from '@/src/ui/mui';
 import i18n from '../../utils/i18n';
 
 export default function Footer() {
 	const { t } = useTranslation();
-	const [language, setLanguage] = useState('en');
-
-	const chooseLanguage = (e) => {
-		e.preventDefault();
-		i18n.changeLanguage(e.target.value); // i18n.changeLanguage() is used to change the language assigned to lng in i18n.js file.
-		setLanguage(e.target.value);
+	const [language, setLanguage] = useState(i18n.language || 'en');
+	const chooseLanguage = (event: ChangeEvent<HTMLInputElement>) => {
+		void i18n.changeLanguage(event.target.value);
+		setLanguage(event.target.value);
 	};
 	return (
-		<Box
-			component='footer'
-			sx={{
-				py: 3,
-				px: 2,
-				mt: 'auto',
-				backgroundColor: (theme) =>
-					theme.palette.mode === 'light'
-						? theme.palette.grey[200]
-						: theme.palette.grey[800],
-			}}
-		>
-			<Container maxWidth='sm'>
-				<Typography variant='body' fontFamily='Markazi Text' color='teal'>
-					{'Copyright © '}
-					<Link color='inherit' href='/'>
-						{t('heading-little-llama')}
-					</Link>{' '}
-					{new Date().getFullYear()}
-					{t('para-xin')}
-				</Typography>
-				<NativeSelect
-					defaultValue='Select Language'
-					inputProps={{
-						name: 'adoption_status',
-						id: 'adoption_status',
-					}}
-					onChange={chooseLanguage}
-					color='success'
-				>
-					<option disabled style={{ textAlign: 'center' }}>
-						Select Language
-					</option>
-					<option value={'en'} style={{ textAlign: 'center' }}>
-						English
-					</option>
-					<option value={'zh_hans'} style={{ textAlign: 'center' }}>
-						简体中文
-					</option>
-					<option value={'zh_hant'} style={{ textAlign: 'center' }}>
-						正體中文
-					</option>
-					<option value={'he'} style={{ textAlign: 'center' }}>
-						עברית
-					</option>
-				</NativeSelect>
+		<Box component='footer' sx={{ mt: 'auto', py: 3.5, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+			<Container maxWidth='lg'>
+				<Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between' }}>
+					<Box>
+						<Typography variant='h5' color='primary.main'>{t('heading-little-llama')}</Typography>
+						<Typography variant='body2' color='text.secondary'>© {new Date().getFullYear()} {t('para-xin')}</Typography>
+					</Box>
+					<TextField select size='small' value={language} onChange={chooseLanguage} label='Language' sx={{ minWidth: 170 }}>
+						<MenuItem value='en'>English</MenuItem><MenuItem value='zh_hans'>简体中文</MenuItem><MenuItem value='zh_hant'>正體中文</MenuItem><MenuItem value='he'>עברית</MenuItem>
+					</TextField>
+				</Stack>
 			</Container>
 		</Box>
 	);

@@ -30,7 +30,7 @@ export default function App() {
 	};
 
 	return (
-		<Stack minHeight='100vh'>
+		<Stack sx={{ minHeight: '100vh' }}>
 			<Navbar user={user} />
 			<Router user={user} />
 			<Footer />

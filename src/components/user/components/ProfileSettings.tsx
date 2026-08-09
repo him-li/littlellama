@@ -117,7 +117,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 						</Typography>
 						<Box component='form' noValidate sx={{ mt: 3 }}>
 							<Grid container spacing={2}>
-								<Grid item xs={12} sm={6}>
+								<Grid size={{ xs: 12, sm: 6 }}>
 									<TextField
 										autoComplete='given-name'
 										name='firstName'
@@ -131,7 +131,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										value={firstName}
 									/>
 								</Grid>
-								<Grid item xs={12} sm={6}>
+								<Grid size={{ xs: 12, sm: 6 }}>
 									<TextField
 										color='secondary'
 										fullWidth
@@ -144,7 +144,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										value={lastName}
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								<Grid size={12}>
 									<TextField
 										color='secondary'
 										fullWidth
@@ -157,7 +157,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										value={email}
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								<Grid size={12}>
 									<TextField
 										color='secondary'
 										fullWidth
@@ -170,7 +170,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										value={phone}
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								<Grid size={12}>
 									<TextField
 										color='secondary'
 										fullWidth
@@ -183,7 +183,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										value={password}
 									/>
 								</Grid>
-								<Grid item xs={12} sm={12}>
+								<Grid size={12}>
 									<TextField
 										color='secondary'
 										fullWidth

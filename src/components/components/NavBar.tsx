@@ -1,266 +1,72 @@
-import * as React from 'react';
+import { useState, type MouseEvent } from 'react';
+import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
-	AppBar,
-	Box,
-	Toolbar,
-	IconButton,
-	Typography,
-	Menu,
-	Container,
-	Avatar,
-	Button,
-	Tooltip,
-	MenuItem,
-	Link,
-	Slide,
-	useScrollTrigger,
+	AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem,
+	Stack, Toolbar, Tooltip, Typography,
 } from '@/src/ui/mui';
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSettingsRounded';
 import littleLlama from '../../assets/littleLlama.png';
+import type { User } from '../../types/models';
 
-function HideOnScroll(props: any) {
-	const { children, window } = props;
-	const trigger = useScrollTrigger({
-		target: window ? window() : undefined,
-	});
-
-	return (
-		<Slide appear={false} direction='down' in={!trigger}>
-			{children}
-		</Slide>
-	);
-}
-
-export default function Navbar({ user, props }: any) {
+export default function Navbar({ user }: { user: User | null }) {
 	const { t } = useTranslation();
-	const [anchorElNav, setAnchorElNav] = React.useState(null);
-	const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-	const handleOpenNavMenu = (event) => {
-		setAnchorElNav(event.currentTarget);
-	};
-
-	const handleOpenUserMenu = (event) => {
-		setAnchorElUser(event.currentTarget);
-	};
-
-	const handleCloseNavMenu = () => {
-		setAnchorElNav(null);
-	};
-
-	const handleCloseUserMenu = () => {
-		setAnchorElUser(null);
-	};
-
+	const pathname = usePathname();
+	const [navAnchor, setNavAnchor] = useState<HTMLElement | null>(null);
+	const [adminAnchor, setAdminAnchor] = useState<HTMLElement | null>(null);
 	const pages = [
-		{
-			page: `${t('link-home')}`,
-			route: '/',
-		},
-		{
-			page: `${t('text-search')}`,
-			route: '/search',
-		},
-		{
-			page: `${t('link-pets')}`,
-			route: '/pets',
-		},
-		{
-			page: `${t('link-mypets')}`,
-			route: '/mypets',
-		},
+		{ label: t('link-home'), href: '/' },
+		{ label: t('text-search'), href: '/search' },
+		{ label: user ? t('link-mypets') : t('link-pets'), href: user ? '/mypets' : '/pets' },
 	];
-
-	const admin = [
-		{
-			page: `${t('link-addpet')}`,
-			route: '/addpet',
-		},
-		{
-			page: `${t('link-dashboard')}`,
-			route: '/dashboard',
-		},
-	];
+	const navigate = (href: string) => {
+		setNavAnchor(null);
+		setAdminAnchor(null);
+		window.location.href = href;
+	};
 
 	return (
-		<HideOnScroll {...props}>
-			<AppBar
-				position='sticky'
-				style={{ backgroundColor: 'rgba(255, 255, 255, 0.75)' }}
-			>
-				<Container maxWidth='md'>
-					<Toolbar disableGutters>
-						<img src={littleLlama.src} height={75} alt='Little Llama' />
-						<Typography
-							variant='h5'
-							noWrap
-							href='/'
-							sx={{
-								mr: 2,
-								display: { xs: 'none', md: 'flex' },
-								fontFamily: 'Markazi Text',
-								fontWeight: 700,
-								letterSpacing: '.1rem',
-								color: 'teal',
-								textDecoration: 'none',
-							}}
-						>
+		<AppBar position='sticky' elevation={0} sx={{ bgcolor: 'rgba(251,250,246,.92)', color: 'text.primary', borderBottom: '1px solid', borderColor: 'divider', backdropFilter: 'blur(18px)' }}>
+			<Container maxWidth='lg'>
+				<Toolbar disableGutters sx={{ minHeight: { xs: 68, md: 80 }, gap: 1.5 }}>
+					<Stack component='a' href='/' direction='row' spacing={1.25} sx={{ textDecoration: 'none', flexShrink: 0, alignItems: 'center' }}>
+						<Box component='img' src={littleLlama.src} alt='Little Llama' sx={{ width: { xs: 50, md: 60 }, height: { xs: 50, md: 60 }, objectFit: 'contain' }} />
+						<Typography variant='h4' sx={{ color: 'primary.main', display: { xs: 'none', sm: 'block' }, lineHeight: 1 }}>
 							{t('heading-little-llama')}
 						</Typography>
+					</Stack>
 
-						<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-							<IconButton
-								size='large'
-								aria-label='account of current user'
-								aria-controls='menu-appbar'
-								aria-haspopup='true'
-								onClick={handleOpenNavMenu}
-								color='success'
-							>
-								<MenuIcon />
-							</IconButton>
-							<Menu
-								id='menu-appbar'
-								anchorEl={anchorElNav}
-								anchorOrigin={{
-									vertical: 'bottom',
-									horizontal: 'left',
-								}}
-								keepMounted
-								transformOrigin={{
-									vertical: 'top',
-									horizontal: 'left',
-								}}
-								open={Boolean(anchorElNav)}
-								onClose={handleCloseNavMenu}
-								sx={{
-									display: { xs: 'block', md: 'none' },
-								}}
-							>
-								{pages.map((page, index) => (
-									<MenuItem key={index} onClick={handleCloseNavMenu}>
-										<Typography textAlign='center'>{page.page}</Typography>
-									</MenuItem>
-								))}
+					<Stack direction='row' spacing={0.5} sx={{ ml: 'auto', display: { xs: 'none', md: 'flex' } }}>
+						{pages.map((page) => (
+							<Button key={page.href} href={page.href} color={pathname === page.href ? 'primary' : 'inherit'} sx={{ bgcolor: pathname === page.href ? 'primary.light' : 'transparent' }}>
+								{page.label}
+							</Button>
+						))}
+					</Stack>
+
+					{user?.admin && (
+						<>
+							<Tooltip title='Admin pages'>
+								<IconButton onClick={(event: MouseEvent<HTMLElement>) => setAdminAnchor(event.currentTarget)} sx={{ ml: { xs: 'auto', md: 1 }, border: '1px solid', borderColor: 'divider' }}>
+									<Avatar sx={{ width: 34, height: 34, bgcolor: 'secondary.main', color: 'secondary.contrastText' }}><AdminPanelSettingsRoundedIcon fontSize='small' /></Avatar>
+								</IconButton>
+							</Tooltip>
+							<Menu anchorEl={adminAnchor} open={Boolean(adminAnchor)} onClose={() => setAdminAnchor(null)}>
+								<MenuItem onClick={() => navigate('/addpet')}>{t('link-addpet')}</MenuItem>
+								<MenuItem onClick={() => navigate('/dashboard')}>{t('link-dashboard')}</MenuItem>
 							</Menu>
-						</Box>
-						<Typography
-							variant='h5'
-							noWrap
-							href='/'
-							sx={{
-								display: { xs: 'flex', md: 'none' },
-								flexGrow: 1,
-								fontFamily: 'monospace',
-								fontWeight: 700,
-								letterSpacing: '.3rem',
-								color: 'teal',
-								textDecoration: 'none',
-							}}
-						>
-							{t('heading-little-llama')}
-						</Typography>
-						<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-							<Button
-								variant='text'
-								color='success'
-								onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
-									color: 'black',
-								}}
-							>
-								<Link href='/' underline='none' color='black'>
-									{t('link-home')}
-								</Link>
-							</Button>
-							<Button
-								variant='text'
-								color='success'
-								onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
-									color: 'black',
-								}}
-							>
-								<Link href='/search' underline='none' color='black'>
-									{t('text-search')}
-								</Link>
-							</Button>
-							{user ? (
-								<Button
-									variant='text'
-									color='success'
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'black',
-									}}
-								>
-									<Link href='/mypets' underline='none' color='black'>
-										{t('link-mypets')}
-									</Link>
-								</Button>
-							) : (
-								<Button
-									variant='text'
-									color='success'
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'black',
-									}}
-								>
-									<Link href='/pets' underline='none' color='black'>
-										{t('link-pets')}
-									</Link>
-								</Button>
-							)}
-						</Box>
-						{user?.admin && (
-							<Box sx={{ flexGrow: 0 }}>
-								<Tooltip title='Admin pages'>
-									<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-										<Avatar src={littleLlama.src} />
-									</IconButton>
-								</Tooltip>
-								<Menu
-									sx={{ mt: '45px' }}
-									id='menu-appbar'
-									anchorEl={anchorElUser}
-									anchorOrigin={{
-										vertical: 'top',
-										horizontal: 'right',
-									}}
-									keepMounted
-									transformOrigin={{
-										vertical: 'top',
-										horizontal: 'right',
-									}}
-									open={Boolean(anchorElUser)}
-									onClose={handleCloseUserMenu}
-								>
-									{admin.map((setting, index) => (
-										<MenuItem key={index} onClick={handleCloseUserMenu}>
-											<Link
-												textAlign='center'
-												href={setting.route}
-												underline='none'
-												color='black'
-											>
-												{setting.page}
-											</Link>
-										</MenuItem>
-									))}
-								</Menu>
-							</Box>
-						)}
-					</Toolbar>
-				</Container>
-			</AppBar>
-		</HideOnScroll>
+						</>
+					)}
+
+					<IconButton aria-label='Open navigation' onClick={(event: MouseEvent<HTMLElement>) => setNavAnchor(event.currentTarget)} sx={{ ml: user?.admin ? 0 : 'auto', display: { md: 'none' } }}>
+						<MenuRoundedIcon />
+					</IconButton>
+					<Menu anchorEl={navAnchor} open={Boolean(navAnchor)} onClose={() => setNavAnchor(null)} PaperProps={{ sx: { minWidth: 210, mt: 1 } }}>
+						{pages.map((page) => <MenuItem key={page.href} selected={pathname === page.href} onClick={() => navigate(page.href)}>{page.label}</MenuItem>)}
+					</Menu>
+				</Toolbar>
+			</Container>
+		</AppBar>
 	);
 }
-
-
