@@ -1,22 +1,21 @@
 import { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Grid, Button } from '@mui/material';
-import PropTypes from 'prop-types';
+import { Grid, Button } from '@/src/ui/mui';
 
-export default function AddImage({ formData, setFormData }) {
-	const [image, setImage] = useState(null);
-	const inputRef = useRef();
+export default function AddImage({ formData, setFormData }: any) {
+	const [image, setImage] = useState<string | File | null>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleThumbnail = () => {
-		if (!inputRef.current.files.length) {
+		if (!inputRef.current?.files?.length) {
 			return;
 		}
 
 		const file = inputRef.current.files[0];
 		const reader = new FileReader();
 		reader.onloadend = () => {
-			setImage(reader.result);
+			setImage(typeof reader.result === 'string' ? reader.result : null);
 		};
 		reader.readAsDataURL(file);
 		setImage(file);
@@ -71,8 +70,3 @@ export default function AddImage({ formData, setFormData }) {
 		</Grid>
 	);
 }
-
-AddImage.propTypes = {
-	formData: PropTypes.object.isRequired,
-	setFormData: PropTypes.func.isRequired,
-};

@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@/src/ui/mui';
 import { GET } from '../../utils/api';
 import PetsList from './components/PetsList';
 import walkingLlama from '../../assets/walkingllama.png';
+import type { Pet, User } from '../../types/models';
 
-export default function Pets({ user }) {
-	const [petsData, setPetsData] = useState([]);
+export default function Pets({ user }: { user: User | null }) {
+	const [petsData, setPetsData] = useState<Pet[]>([]);
 	const userData = user;
 	console.log(userData);
 	useEffect(() => {
@@ -16,11 +16,11 @@ export default function Pets({ user }) {
 				console.log(user);
 				if (user) {
 					console.log(user.id);
-					const pets = await GET('/pet/', { id: user.id });
+					const pets = await GET<Pet[]>('/pet/', { id: user.id });
 					console.log(pets);
 					setPetsData(pets);
 				} else {
-					const pets = await GET('/pet');
+					const pets = await GET<Pet[]>('/pet');
 					console.log(pets);
 					setPetsData(pets);
 				}
@@ -71,6 +71,3 @@ export default function Pets({ user }) {
 		</Box>
 	);
 }
-Pets.prototype = {
-	user: PropTypes.array,
-};

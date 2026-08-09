@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import PropTypes from 'prop-types';
 import {
 	Avatar,
 	Box,
@@ -11,7 +10,7 @@ import {
 	Stepper,
 	Step,
 	StepLabel,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import { POST } from '../../utils/api';
 import AddInfo from './components/AddInfo';
 import AddImage from './components/AddImage';
@@ -20,7 +19,7 @@ import littleLlama from '../../assets/littleLlama.png';
 
 const steps = ['Add Information', 'Upload Picture', 'Review Details'];
 
-export default function AddPet({ user }) {
+export default function AddPet({ user }: any) {
 	const router = useRouter();
 	const [activeStep, setActiveStep] = useState(0);
 	const [formData, setFormData] = useState({
@@ -60,10 +59,10 @@ export default function AddPet({ user }) {
 		body.append('weight', formData.weight);
 		body.append('color', formData.color);
 		body.append('bio', formData.bio);
-		body.append('hypoallergenic', formData.hypoallergenic);
+		body.append('hypoallergenic', String(formData.hypoallergenic));
 		body.append('dietary_restrictions', formData.dietary_restrictions);
 		body.append('breed', formData.breed);
-		body.append('picture', formData.picture);
+		if (formData.picture) body.append('picture', formData.picture);
 		console.log('This is body', body);
 		const data = await POST('/pet', body);
 		if (!data) {
@@ -133,7 +132,7 @@ export default function AddPet({ user }) {
 								variant='contained'
 								color='secondary'
 								onClick={() => {
-									setFormData({});
+									setFormData({ ...formData, name: '', picture: null });
 									setActiveStep(0);
 								}}
 								sx={{ mt: 3, ml: 1 }}
@@ -199,8 +198,4 @@ const style = {
 	borderRadius: '5px',
 	boxShadow: 24,
 	p: 4,
-};
-
-AddPet.propTypes = {
-	user: PropTypes.object,
 };

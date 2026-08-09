@@ -1,14 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Tabs, Tab, Typography, Box, Grid } from '@mui/material';
+import { AppBar, Tabs, Tab, Typography, Box, Grid } from '@/src/ui/mui';
 import { GET } from '../../utils/api';
 import PetsList from './components/PetsList';
 import PetsPage from './Pets';
 import walkingLlama from '../../assets/walkingllama.png';
 
-function TabPanel(props) {
+function TabPanel(props: any) {
 	const { children, value, index, ...other } = props;
 	return (
 		<div
@@ -33,7 +32,7 @@ function a11yProps(index) {
 		'aria-controls': `full-width-tabpanel-${index}`,
 	};
 }
-export default function MyPets({ user }) {
+export default function MyPets({ user }: any) {
 	const theme = useTheme();
 	const [petsData, setPetsData] = useState([]);
 	const [value, setValue] = useState(0);
@@ -122,12 +121,4 @@ export default function MyPets({ user }) {
 	);
 }
 
-MyPets.prototype = {
-	user: PropTypes.array,
-};
 
-TabPanel.propTypes = {
-	children: PropTypes.node,
-	index: PropTypes.number.isRequired,
-	value: PropTypes.number.isRequired,
-};

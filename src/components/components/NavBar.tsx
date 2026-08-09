@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
 	AppBar,
@@ -16,11 +15,11 @@ import {
 	Link,
 	Slide,
 	useScrollTrigger,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import MenuIcon from '@mui/icons-material/Menu';
 import littleLlama from '../../assets/littleLlama.png';
 
-function HideOnScroll(props) {
+function HideOnScroll(props: any) {
 	const { children, window } = props;
 	const trigger = useScrollTrigger({
 		target: window ? window() : undefined,
@@ -33,7 +32,7 @@ function HideOnScroll(props) {
 	);
 }
 
-export default function Navbar({ user, props }) {
+export default function Navbar({ user, props }: any) {
 	const { t } = useTranslation();
 	const [anchorElNav, setAnchorElNav] = React.useState(null);
 	const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -264,12 +263,4 @@ export default function Navbar({ user, props }) {
 	);
 }
 
-Navbar.propTypes = {
-	user: PropTypes.object,
-	props: PropTypes.func,
-};
 
-HideOnScroll.propTypes = {
-	children: PropTypes.element.isRequired,
-	window: PropTypes.func,
-};

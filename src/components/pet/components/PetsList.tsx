@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import {
 	Box,
 	Card,
@@ -7,12 +6,21 @@ import {
 	Stack,
 	Typography,
 	IconButton,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import Masonry from '@mui/lab/Masonry';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PetDetails from './PetDetails';
+import type { Pet, User } from '../../../types/models';
 
-export default function PetsList({ petsData, hide, status, user }) {
+interface PetsListProps {
+	petsData: Pet[];
+	hide?: boolean;
+	status?: boolean;
+	display?: boolean;
+	user: User | null;
+}
+
+export default function PetsList({ petsData, hide, status, user }: PetsListProps) {
 	const [selectedPetId, setSelectedPetId] = useState(null);
 	const [open, setOpen] = useState(false);
 
@@ -100,10 +108,3 @@ export default function PetsList({ petsData, hide, status, user }) {
 		</Box>
 	);
 }
-
-PetsList.prototype = {
-	petsData: PropTypes.object,
-	hide: PropTypes.bool,
-	status: PropTypes.bool,
-	user: PropTypes.array,
-};

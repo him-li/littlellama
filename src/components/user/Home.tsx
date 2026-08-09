@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import {
 	Box,
 	Stack,
@@ -10,17 +9,18 @@ import {
 	Grid,
 	Snackbar,
 	Alert,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import PetsList from '../pet/components/PetsList';
 import ProfileSettings from './components/ProfileSettings';
 import { GET } from '../../utils/api';
 import heroImage from '../../assets/your-pet-included.jpg';
+import type { Pet, User } from '../../types/models';
 
-export default function Home({ user }) {
+export default function Home({ user }: { user: User | null }) {
 	const { t } = useTranslation();
-	const [petsData, setPetsData] = useState([]);
+	const [petsData, setPetsData] = useState<Pet[]>([]);
 	const [openSignup, setOpenSignup] = useState(false);
 	const [openLogin, setOpenLogin] = useState(false);
 	const [openSuccess, setOpenSuccess] = useState(false);
@@ -33,7 +33,7 @@ export default function Home({ user }) {
 
 	const fetchPetsData = async () => {
 		try {
-			const res = await GET('/pet');
+			const res = await GET<Pet[]>('/pet');
 			setPetsData(res);
 		} catch (error) {
 			console.error('Error fetching pets data:', error);
@@ -206,7 +206,3 @@ export default function Home({ user }) {
 		</React.Fragment>
 	);
 }
-
-Home.prototype = {
-	user: PropTypes.object,
-};

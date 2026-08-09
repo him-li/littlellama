@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import {
 	Backdrop,
 	Box,
@@ -15,12 +14,12 @@ import {
 	Typography,
 	Snackbar,
 	Alert,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import { useSpring, animated } from '@react-spring/web';
 import { POST } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
 
-const Fade = React.forwardRef(function Fade(props, ref) {
+const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	const {
 		children,
 		in: open,
@@ -52,7 +51,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 	);
 });
 
-export default function Signup({ open, handleClose }) {
+export default function Signup({ open, handleClose }: any) {
 	const { t } = useTranslation();
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
@@ -273,19 +272,7 @@ export default function Signup({ open, handleClose }) {
 	);
 }
 
-Signup.propTypes = {
-	open: PropTypes.bool.isRequired,
-	handleClose: PropTypes.func.isRequired,
-};
 
-Fade.propTypes = {
-	children: PropTypes.element.isRequired,
-	in: PropTypes.bool,
-	onClick: PropTypes.any,
-	onEnter: PropTypes.func,
-	onExited: PropTypes.func,
-	ownerState: PropTypes.any,
-};
 
 const style = {
 	marginTop: 8,

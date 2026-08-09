@@ -1,13 +1,12 @@
-import PropTypes from 'prop-types';
 import {
 	Grid,
 	NativeSelect,
 	TextField,
 	FormControlLabel,
 	Checkbox,
-} from '@mui/material';
+} from '@/src/ui/mui';
 
-export default function AddInfo({ formData, setFormData }) {
+export default function AddInfo({ formData, setFormData }: any) {
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
@@ -597,7 +596,3 @@ const dogBreeds = [
 	'Zuchon',
 ];
 
-AddInfo.propTypes = {
-	formData: PropTypes.object,
-	setFormData: PropTypes.func,
-};

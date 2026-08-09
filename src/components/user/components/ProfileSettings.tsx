@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import {
 	Backdrop,
 	Box,
@@ -12,12 +11,12 @@ import {
 	Grid,
 	Alert,
 	Snackbar,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import { useSpring, animated } from '@react-spring/web';
 import { PUT } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
 
-const Fade = React.forwardRef(function Fade(props, ref) {
+const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	const {
 		children,
 		in: open,
@@ -49,7 +48,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 	);
 });
 
-export default function ProfileSettings({ open, handleClose, user }) {
+export default function ProfileSettings({ open, handleClose, user }: any) {
 	const { t } = useTranslation();
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
@@ -233,20 +232,7 @@ export default function ProfileSettings({ open, handleClose, user }) {
 	);
 }
 
-ProfileSettings.propTypes = {
-	open: PropTypes.bool,
-	handleClose: PropTypes.func,
-	user: PropTypes.object || PropTypes.string,
-};
 
-Fade.propTypes = {
-	children: PropTypes.element.isRequired,
-	in: PropTypes.bool,
-	onClick: PropTypes.any,
-	onEnter: PropTypes.func,
-	onExited: PropTypes.func,
-	ownerState: PropTypes.any,
-};
 
 const style = {
 	position: 'absolute',

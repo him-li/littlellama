@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import PropTypes from 'prop-types';
 import {
 	Backdrop,
 	Modal,
@@ -17,7 +16,7 @@ import {
 	Stack,
 	Button,
 	ButtonGroup,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import HomeIcon from '@mui/icons-material/Home';
@@ -33,8 +32,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSpring, animated } from '@react-spring/web';
 import { GET, POST, DELETE } from '../../../utils/api';
+import type { Pet } from '../../../types/models';
 
-const Fade = React.forwardRef(function Fade(props, ref) {
+const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	const {
 		children,
 		in: open,
@@ -66,9 +66,9 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 	);
 });
 
-export default function PetDetails({ open, handleClose, petId, user }) {
+export default function PetDetails({ open, handleClose, petId, user }: any) {
 	const router = useRouter();
-	const [pet, setPet] = useState([]);
+	const [pet, setPet] = useState<Partial<Pet>>({});
 	const [saved, setSaved] = useState(false);
 
 	useEffect(() => {
@@ -330,25 +330,4 @@ const style = {
 	flexDirection: 'column',
 	alignItems: 'center',
 	minWidth: '50%',
-};
-
-Fade.propTypes = {
-	children: PropTypes.element.isRequired,
-	in: PropTypes.bool,
-	onClick: PropTypes.any,
-	onEnter: PropTypes.func,
-	onExited: PropTypes.func,
-	ownerState: PropTypes.any,
-};
-PetDetails.propTypes = {
-	user: PropTypes.object,
-	open: PropTypes.bool,
-	handleClose: PropTypes.func,
-	petId: PropTypes.string,
-	relationId: PropTypes.string,
-	isSaved: PropTypes.bool,
-	handleSave: PropTypes.func,
-	handleAdopt: PropTypes.func,
-	handleFoster: PropTypes.func,
-	handleReturn: PropTypes.func,
 };

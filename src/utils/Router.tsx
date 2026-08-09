@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { usePathname } from 'next/navigation';
 import Home from '../components/user/Home';
 import MyPets from '../components/pet/MyPets';
@@ -9,8 +8,9 @@ import Dashboard from '../components/admin/Dashboard';
 import PetDetails from '../components/pet/components/PetDetails';
 import EditPet from '../components/admin/EditPet';
 import NotFound from '../components/components/NotFound';
+import type { User } from '../types/models';
 
-export default function Router({ user }) {
+export default function Router({ user }: { user: User | null }) {
 	const pathname = usePathname();
 	const petDetails = pathname.match(/^\/pets\/([^/]+)$/);
 	const editPet = pathname.match(/^\/pet\/([^/]+)\/edit$/);
@@ -24,7 +24,3 @@ export default function Router({ user }) {
 	if (pathname === '/dashboard') return <Dashboard user={user} />;
 	return <NotFound />;
 }
-
-Router.propTypes = {
-	user: PropTypes.object,
-};

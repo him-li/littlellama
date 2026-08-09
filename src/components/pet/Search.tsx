@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import {
 	Box,
 	Stack,
@@ -10,16 +9,17 @@ import {
 	FormControlLabel,
 	Checkbox,
 	NativeSelect,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import PetsList from './components/PetsList';
 import { GET } from '../../utils/api';
+import type { Pet, User } from '../../types/models';
 
-export default function Search({ user }) {
+export default function Search({ user }: { user: User | null }) {
 	const { t } = useTranslation();
 	const [isAdvancedSearch, setIsAdvancedSearch] = useState(false);
-	const [petsData, setPetsData] = useState([]);
+	const [petsData, setPetsData] = useState<Pet[]>([]);
 	const [searchParams, setSearchParams] = useState({
 		type: '',
 		adoption_status: '',
@@ -32,7 +32,7 @@ export default function Search({ user }) {
 	const fetchPetsData = async () => {
 		try {
 			const queryParams = buildQueryParams(searchParams);
-			const res = await GET(`/pet${queryParams}`);
+			const res = await GET<Pet[]>(`/pet${queryParams}`);
 			console.log(res);
 			setPetsData(res);
 		} catch (error) {
@@ -223,7 +223,3 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 		},
 	},
 }));
-
-Search.propTypes = {
-	user: PropTypes.object,
-};

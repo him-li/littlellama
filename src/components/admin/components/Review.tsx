@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import PropTypes from 'prop-types';
 import {
 	Typography,
 	List,
@@ -11,14 +10,14 @@ import {
 	CardActionArea,
 	Stack,
 	ListItemIcon,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import HomeIcon from '@mui/icons-material/Home';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import NoFoodIcon from '@mui/icons-material/NoFood';
-export default function Review({ formData }) {
+export default function Review({ formData }: any) {
 	return (
 		<Card sx={style} onClick={(e) => e.stopPropagation()}>
 			<CardActionArea
@@ -133,6 +132,3 @@ const style = {
 	minWidth: '50%',
 };
 
-Review.propType = {
-	formData: PropTypes.object,
-};

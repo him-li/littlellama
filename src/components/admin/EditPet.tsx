@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import PropTypes from 'prop-types';
 import {
 	Avatar,
 	Box,
@@ -11,7 +10,7 @@ import {
 	Stepper,
 	Step,
 	StepLabel,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import { GET, PUT } from '../../utils/api';
 import AddInfo from './components/AddInfo';
 import AddImage from './components/AddImage';
@@ -20,7 +19,7 @@ import littleLlama from '../../assets/littleLlama.png';
 
 const steps = ['Edit Information', 'Upload Picture', 'Review Details'];
 
-export default function EditPet({ user, petId }) {
+export default function EditPet({ user, petId }: any) {
 	const router = useRouter();
 	const id = petId;
 	console.log(id);
@@ -37,6 +36,7 @@ export default function EditPet({ user, petId }) {
 		dietary_restrictions: '',
 		breed: '',
 		picture: null,
+		image: null,
 	});
 
 	useEffect(() => {
@@ -71,10 +71,10 @@ export default function EditPet({ user, petId }) {
 		body.append('weight', formData.weight);
 		body.append('color', formData.color);
 		body.append('bio', formData.bio);
-		body.append('hypoallergenic', formData.hypoallergenic);
+		body.append('hypoallergenic', String(formData.hypoallergenic));
 		body.append('dietary_restrictions', formData.dietary_restrictions);
 		body.append('breed', formData.breed);
-		body.append('image', formData.image);
+		if (formData.image) body.append('image', formData.image);
 		console.log('This is body', body);
 		const data = await PUT(`/pet/${id}`, body);
 		if (!data) {
@@ -145,7 +145,7 @@ export default function EditPet({ user, petId }) {
 								variant='contained'
 								color='secondary'
 								onClick={() => {
-									setFormData({});
+									setFormData({ ...formData, name: '', picture: null });
 									setActiveStep(0);
 								}}
 								sx={{ mt: 3, ml: 1 }}
@@ -211,9 +211,4 @@ const style = {
 	borderRadius: '5px',
 	boxShadow: 24,
 	p: 4,
-};
-
-EditPet.propTypes = {
-	user: PropTypes.object,
-	petId: PropTypes.string,
 };

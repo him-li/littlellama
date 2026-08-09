@@ -5,6 +5,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { amber, teal } from '@mui/material/colors';
 import CssBaseline from '@mui/material/CssBaseline';
 import '../src/utils/i18n';
+import type { PropsWithChildren } from 'react';
 
 const theme = createTheme({
 	typography: { fontFamily: ['Karla Variable', 'sans-serif', 'Markazi Text Variable', 'serif'].join(',') },
@@ -15,6 +16,6 @@ const theme = createTheme({
 	},
 });
 
-export default function Providers({ children }) {
+export default function Providers({ children }: PropsWithChildren) {
 	return <AppRouterCacheProvider options={{ enableCssLayer: true }}><ThemeProvider theme={theme}><CssBaseline />{children}</ThemeProvider></AppRouterCacheProvider>;
 }

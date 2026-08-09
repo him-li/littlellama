@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Avatar, Typography } from '@mui/material';
+import { Box, Avatar, Typography } from '@/src/ui/mui';
 import walkingLlama from '../../assets/walkingllama.png';
 
 export default function NotFound() {

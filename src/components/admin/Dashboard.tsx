@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useRouter } from 'next/navigation';
 import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
@@ -18,14 +17,14 @@ import {
 	ListItem,
 	ListItemText,
 	Grid,
-} from '@mui/material';
+} from '@/src/ui/mui';
 import Masonry from '@mui/lab/Masonry';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PetsList from '../pet/components/PetsList';
 import { GET } from '../../utils/api';
 import walkingLlama from '../../assets/walkingllama.png';
 
-function TabPanel(props) {
+function TabPanel(props: any) {
 	const { children, value, index, ...other } = props;
 	return (
 		<div
@@ -55,7 +54,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 	color: theme.palette.text.secondary,
 }));
 
-export default function Dashboard({ user }) {
+export default function Dashboard({ user }: any) {
 	const theme = useTheme();
 	const router = useRouter();
 	const [value, setValue] = useState(0);
@@ -211,11 +210,3 @@ export default function Dashboard({ user }) {
 	);
 }
 
-TabPanel.propTypes = {
-	children: PropTypes.node,
-	index: PropTypes.number.isRequired,
-	value: PropTypes.number.isRequired,
-};
-Dashboard.propTypes = {
-	user: PropTypes.object,
-};

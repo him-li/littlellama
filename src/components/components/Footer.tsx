@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography, Container, Link, NativeSelect } from '@mui/material';
+import { Box, Typography, Container, Link, NativeSelect } from '@/src/ui/mui';
 import i18n from '../../utils/i18n';
 
 export default function Footer() {

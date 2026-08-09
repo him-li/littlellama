@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Stack } from '@mui/material';
+import { Stack } from '@/src/ui/mui';
 import Router from './utils/Router';
 import Navbar from './components/components/NavBar';
 import Footer from './components/components/Footer';
 import { GET } from './utils/api';
+import type { User } from './types/models';
 
 export default function App() {
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState<User | null>(null);
 
 	useEffect(() => {
 		fetchCurrentUser();
@@ -16,7 +17,7 @@ export default function App() {
 
 	const fetchCurrentUser = async () => {
 		try {
-			const res = await GET('/login');
+			const res = await GET<User | null>('/login');
 			if (res !== null) {
 				console.log(res);
 				setUser(res);
