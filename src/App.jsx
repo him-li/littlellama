@@ -1,13 +1,14 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { Stack } from '@mui/material';
-import './App.css';
 import Router from './utils/Router';
-import Navbar from './pages/components/Navbar';
-import Footer from './pages/components/Footer';
+import Navbar from './components/components/NavBar';
+import Footer from './components/components/Footer';
 import { GET } from './utils/api';
 
 export default function App() {
-	const [user, setUser] = useState({});
+	const [user, setUser] = useState(null);
 
 	useEffect(() => {
 		fetchCurrentUser();

@@ -24,10 +24,10 @@ const resources = {
 i18n
   .use(initReactI18next)
   .init({
-    compatabilityJSON: "v3",
+    compatibilityJSON: "v4",
     resources,
     lng: "en",
-    debug: true,
+    debug: false,
     fallbackLng: "en",
     interpolation: {
       escapeValue: false

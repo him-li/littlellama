@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
 import {
 	Avatar,
@@ -12,17 +12,16 @@ import {
 	Step,
 	StepLabel,
 } from '@mui/material';
-import { GET, PUT } from '../../utils/api';
+import { POST } from '../../utils/api';
 import AddInfo from './components/AddInfo';
 import AddImage from './components/AddImage';
 import Review from './components/Review';
+import littleLlama from '../../assets/littleLlama.png';
 
-const steps = ['Edit Information', 'Upload Picture', 'Review Details'];
+const steps = ['Add Information', 'Upload Picture', 'Review Details'];
 
-export default function EditPet({ user }) {
-	const navigate = useNavigate();
-	const { id } = useParams();
-	console.log(id);
+export default function AddPet({ user }) {
+	const router = useRouter();
 	const [activeStep, setActiveStep] = useState(0);
 	const [formData, setFormData] = useState({
 		type: '',
@@ -39,19 +38,10 @@ export default function EditPet({ user }) {
 	});
 
 	useEffect(() => {
-		if (user.admin === false) {
-			navigate('*');
-		} else {
-			const petData = async () => {
-				const data = await GET(`/pet/${id}`);
-				if (!data) {
-					return;
-				}
-				setFormData(data);
-			};
-			petData();
+		if (user?.admin === false) {
+			router.replace('/not-found');
 		}
-	}, [user, navigate, id]);
+	}, [user, router]);
 
 	const handleNext = () => {
 		setActiveStep(activeStep + 1);
@@ -73,9 +63,9 @@ export default function EditPet({ user }) {
 		body.append('hypoallergenic', formData.hypoallergenic);
 		body.append('dietary_restrictions', formData.dietary_restrictions);
 		body.append('breed', formData.breed);
-		body.append('image', formData.image);
+		body.append('picture', formData.picture);
 		console.log('This is body', body);
-		const data = await PUT(`/pet/${id}`, body);
+		const data = await POST('/pet', body);
 		if (!data) {
 			return;
 		}
@@ -100,7 +90,7 @@ export default function EditPet({ user }) {
 					/>
 				)}
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main', zIndex: 1 }}>
-					<img src='../../../../src/assets/littleLlama.png' height={75} />
+					<img src={littleLlama.src} height={75} alt='' />
 				</Avatar>
 				<Typography
 					variant='h2'
@@ -108,7 +98,7 @@ export default function EditPet({ user }) {
 					color='secondary'
 					zIndex={1}
 				>
-					Edit Pet
+					Add Pet
 				</Typography>
 				<Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5, zIndex: 1 }}>
 					{steps.map((label) => (
@@ -125,20 +115,19 @@ export default function EditPet({ user }) {
 						my: { xs: 3, md: 6 },
 						p: { xs: 2, md: 3 },
 						color: 'black',
-						backgroundColor: 'transparent',
 						zIndex: 1,
+						backgroundColor: 'transparent',
 						border: '0',
 					}}
 				>
 					{activeStep === steps.length ? (
 						<React.Fragment>
 							<Typography variant='h5'>
-								{formData.name} has been edited.
+								{formData.name} has been added.
 							</Typography>
 							<Typography variant='subtitle1'>
-								Details of{' '}
 								{formData.name + ' the ' + formData.breed + ' ' + formData.type}{' '}
-								have been successfully edited and saved to the database.
+								has been successfully added to the database.
 							</Typography>
 							<Button
 								variant='contained'
@@ -183,7 +172,7 @@ export default function EditPet({ user }) {
 									}
 									sx={{ mt: 3, ml: 1 }}
 								>
-									{activeStep === steps.length - 1 ? 'Save Changes' : 'Next'}
+									{activeStep === steps.length - 1 ? 'Add Pet' : 'Next'}
 								</Button>
 							</Box>
 						</React.Fragment>
@@ -212,6 +201,6 @@ const style = {
 	p: 4,
 };
 
-EditPet.propTypes = {
+AddPet.propTypes = {
 	user: PropTypes.object,
 };

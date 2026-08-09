@@ -1,44 +1,33 @@
 {
-  "name": "pet-adoption-front-him97",
+  "name": "little-llama",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@fontsource-variable/karla": "^5.0.9",
-    "@fontsource-variable/markazi-text": "^5.0.8",
-    "@mui/icons-material": "^5.14.7",
-    "@mui/lab": "^5.0.0-alpha.153",
-    "@mui/material": "^5.14.18",
-    "@mui/styled-engine-sc": "^5.14.7",
-    "axios": "^1.5.0",
-    "i18next": "^23.7.7",
-    "localforage": "^1.10.0",
-    "match-sorter": "^6.3.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-i18next": "^13.5.0",
-    "react-router-dom": "^6.15.0",
-    "react-spring": "^9.7.2",
-    "react-swipeable-views": "^0.14.0",
-    "sort-by": "^1.2.0",
-    "styled-components": "^5.3.11"
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@fontsource-variable/karla": "latest",
+    "@fontsource-variable/markazi-text": "latest",
+    "@mui/icons-material": "latest",
+    "@mui/lab": "latest",
+    "@mui/material": "latest",
+    "@mui/material-nextjs": "latest",
+    "@react-spring/web": "latest",
+    "axios": "latest",
+    "i18next": "latest",
+    "next": "latest",
+    "prop-types": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-i18next": "latest"
   },
   "devDependencies": {
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@vitejs/plugin-react": "^4.0.3",
-    "eslint": "^8.45.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.3",
-    "vite": "^4.4.5"
+    "eslint": "latest",
+    "eslint-config-next": "latest"
   }
 }

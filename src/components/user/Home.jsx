@@ -16,6 +16,7 @@ import Login from './components/Login';
 import PetsList from '../pet/components/PetsList';
 import ProfileSettings from './components/ProfileSettings';
 import { GET } from '../../utils/api';
+import heroImage from '../../assets/your-pet-included.jpg';
 
 export default function Home({ user }) {
 	const { t } = useTranslation();
@@ -148,7 +149,7 @@ export default function Home({ user }) {
 						</Grid>
 						<Grid item flexGrow={1} xs='auto' md={4} position='relative'>
 							<img
-								src='./src/assets/your-pet-included.jpg'
+								src={heroImage.src}
 								width='100%'
 								style={{
 									borderRadius: 5,

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Box, Grid, Typography } from '@mui/material';
 import { GET } from '../../utils/api';
 import PetsList from './components/PetsList';
+import walkingLlama from '../../assets/walkingllama.png';
 
 export default function Pets({ user }) {
 	const [petsData, setPetsData] = useState([]);
@@ -53,7 +54,7 @@ export default function Pets({ user }) {
 					</Grid>
 					<Grid item flexGrow={1} xs='auto' md={4} position='relative'>
 						<img
-							src='./src/assets/walkingllama.png'
+							src={walkingLlama.src}
 							width='100%'
 							style={{
 								borderRadius: 5,

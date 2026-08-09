@@ -1,21 +1,22 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Box, Avatar, Typography } from '@mui/material';
+import walkingLlama from '../../assets/walkingllama.png';
 
 export default function NotFound() {
-	const navigate = useNavigate();
+	const router = useRouter();
 
 	useEffect(() => {
 		setTimeout(() => {
-			navigate('/');
+			router.replace('/');
 		}, 5000);
-	}, [navigate]);
+	}, [router]);
 
 	return (
 		<Box height='100vh' bgcolor='teal'>
 			<Box sx={style}>
 				<Avatar
-					src='../src/assets/walkingllama.png'
+					src={walkingLlama.src}
 					sx={{ width: 150, height: 150 }}
 				/>
 				<Typography variant='h4'>

@@ -1,32 +1,28 @@
 import PropTypes from 'prop-types';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from '../pages/user/Home';
-import MyPets from '../pages/pet/MyPets';
-import Pets from '../pages/pet/Pets';
-import Search from '../pages/pet/Search';
-import AddPet from '../pages/admin/AddPet';
-import Dashboard from '../pages/admin/Dashboard';
-import PetDetails from '../pages/pet/components/PetDetails';
-import EditPet from '../pages/admin/EditPet';
-import NotFound from '../pages/components/NotFound';
+import { usePathname } from 'next/navigation';
+import Home from '../components/user/Home';
+import MyPets from '../components/pet/MyPets';
+import Pets from '../components/pet/Pets';
+import Search from '../components/pet/Search';
+import AddPet from '../components/admin/AddPet';
+import Dashboard from '../components/admin/Dashboard';
+import PetDetails from '../components/pet/components/PetDetails';
+import EditPet from '../components/admin/EditPet';
+import NotFound from '../components/components/NotFound';
 
 export default function Router({ user }) {
-	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path='/' exact element={<Home user={user} />}></Route>
-				<Route path='/home' element={<Home user={user} />}></Route>
-				<Route path='/mypets' element={<MyPets user={user} />}></Route>
-				<Route path='/pets' element={<Pets user={user} />}></Route>
-				<Route path='/pets/:id' element={<PetDetails user={user} />}></Route>
-				<Route path='/search' element={<Search user={user} />}></Route>
-				<Route path='/addpet' element={<AddPet user={user} />}></Route>
-				<Route path='/pet/:id/edit' element={<EditPet user={user} />}></Route>
-				<Route path='/dashboard' element={<Dashboard user={user} />}></Route>
-				<Route path='*' element={<NotFound />}></Route>
-			</Routes>
-		</BrowserRouter>
-	);
+	const pathname = usePathname();
+	const petDetails = pathname.match(/^\/pets\/([^/]+)$/);
+	const editPet = pathname.match(/^\/pet\/([^/]+)\/edit$/);
+	if (pathname === '/' || pathname === '/home') return <Home user={user} />;
+	if (pathname === '/mypets') return <MyPets user={user} />;
+	if (pathname === '/pets') return <Pets user={user} />;
+	if (petDetails) return <PetDetails open petId={petDetails[1]} user={user} />;
+	if (pathname === '/search') return <Search user={user} />;
+	if (pathname === '/addpet') return <AddPet user={user} />;
+	if (editPet) return <EditPet petId={editPet[1]} user={user} />;
+	if (pathname === '/dashboard') return <Dashboard user={user} />;
+	return <NotFound />;
 }
 
 Router.propTypes = {

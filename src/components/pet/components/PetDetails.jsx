@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
 import {
 	Backdrop,
@@ -28,7 +28,7 @@ import UndoIcon from '@mui/icons-material/Undo';
 import PetsIcon from '@mui/icons-material/Pets';
 import AddHomeIcon from '@mui/icons-material/AddHome';
 import StarIcon from '@mui/icons-material/Star';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSpring, animated } from '@react-spring/web';
@@ -67,7 +67,7 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 });
 
 export default function PetDetails({ open, handleClose, petId, user }) {
-	const navigate = useNavigate();
+	const router = useRouter();
 	const [pet, setPet] = useState([]);
 	const [saved, setSaved] = useState(false);
 
@@ -139,7 +139,7 @@ export default function PetDetails({ open, handleClose, petId, user }) {
 	};
 
 	const handleEdit = async () => {
-		navigate(`/pet/${pet.id}/edit`);
+		router.push(`/pet/${pet.id}/edit`);
 	};
 
 	return (
@@ -295,11 +295,11 @@ export default function PetDetails({ open, handleClose, petId, user }) {
 									{saved ? (
 										<StarIcon sx={{ mr: 1 }} />
 									) : (
-										<StarOutlineIcon sx={{ mr: 1 }} />
+										<StarBorderIcon sx={{ mr: 1 }} />
 									)}
 									Save
 								</Button>
-								{user.admin && (
+								{user?.admin && (
 									<Button variant='text' color='inherit' onClick={handleEdit}>
 										<EditIcon sx={{ mr: 1 }} />
 										Edit

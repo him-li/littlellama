@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { AppBar, Tabs, Tab, Typography, Box, Grid } from '@mui/material';
 import { GET } from '../../utils/api';
 import PetsList from './components/PetsList';
 import PetsPage from './Pets';
+import walkingLlama from '../../assets/walkingllama.png';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -35,7 +35,6 @@ function a11yProps(index) {
 }
 export default function MyPets({ user }) {
 	const theme = useTheme();
-	const navigate = useNavigate();
 	const [petsData, setPetsData] = useState([]);
 	const [value, setValue] = useState(0);
 
@@ -57,7 +56,7 @@ export default function MyPets({ user }) {
 			}
 		};
 		fetchPetsData();
-	}, [user, navigate]);
+	}, [user]);
 
 	return (
 		<Box width='100%'>
@@ -101,7 +100,7 @@ export default function MyPets({ user }) {
 							</Grid>
 							<Grid item flexGrow={1} xs='auto' md={4} position='relative'>
 								<img
-									src='./src/assets/walkingllama.png'
+									src={walkingLlama.src}
 									width='100%'
 									style={{
 										borderRadius: 5,

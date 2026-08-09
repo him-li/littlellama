@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -23,6 +23,7 @@ import Masonry from '@mui/lab/Masonry';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PetsList from '../pet/components/PetsList';
 import { GET } from '../../utils/api';
+import walkingLlama from '../../assets/walkingllama.png';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -56,18 +57,18 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 
 export default function Dashboard({ user }) {
 	const theme = useTheme();
-	const navigate = useNavigate();
+	const router = useRouter();
 	const [value, setValue] = useState(0);
 	const [users, setUsers] = useState([]);
 	const [petsData, setPetsData] = useState([]);
 
 	useEffect(() => {
-		if (user.admin === false) {
-			navigate('*');
+		if (user?.admin === false) {
+			router.replace('/not-found');
 		}
 		fetchUsers();
 		fetchPets();
-	}, [user, navigate]);
+	}, [user, router]);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -115,7 +116,7 @@ export default function Dashboard({ user }) {
 						</Grid>
 						<Grid item flexGrow={1} xs='auto' md={4} position='relative'>
 							<img
-								src='./src/assets/walkingllama.png'
+								src={walkingLlama.src}
 								width='100%'
 								style={{
 									borderRadius: 5,

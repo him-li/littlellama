@@ -18,6 +18,7 @@ import {
 	useScrollTrigger,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import littleLlama from '../../assets/littleLlama.png';
 
 function HideOnScroll(props) {
 	const { children, window } = props;
@@ -91,7 +92,7 @@ export default function Navbar({ user, props }) {
 			>
 				<Container maxWidth='md'>
 					<Toolbar disableGutters>
-						<img src='./src/assets/littleLlama.png' height={75} />
+						<img src={littleLlama.src} height={75} alt='Little Llama' />
 						<Typography
 							variant='h5'
 							noWrap
@@ -218,11 +219,11 @@ export default function Navbar({ user, props }) {
 								</Button>
 							)}
 						</Box>
-						{user.admin && (
+						{user?.admin && (
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title='Admin pages'>
 									<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-										<Avatar src='./src/assets/littleLlama.png' />
+										<Avatar src={littleLlama.src} />
 									</IconButton>
 								</Tooltip>
 								<Menu

@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { useSpring, animated } from '@react-spring/web';
 import { POST } from '../../../utils/api';
+import littleLlama from '../../../assets/littleLlama.png';
 
 const Fade = React.forwardRef(function Fade(props, ref) {
 	const {
@@ -108,7 +109,7 @@ export default function Signup({ open, handleClose }) {
 				<Fade in={open}>
 					<Box sx={style}>
 						<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-							<img src='../../../../src/assets/littleLlama.png' height={75} />
+							<img src={littleLlama.src} height={75} alt='' />
 						</Avatar>
 						<Typography component='h1' variant='h5'>
 							{t('button-signup')}
