@@ -65,11 +65,13 @@ export default function Home({ user }: { user: User | null }) {
 		<React.Fragment>
 			<Signup open={openSignup} handleClose={() => setOpenSignup(false)} />
 			<Login open={openLogin} handleClose={() => setOpenLogin(false)} />
-			<ProfileSettings
-				open={openProfile}
-				handleClose={() => setOpenProfile(false)}
-				user={user}
-			/>
+			{user && (
+				<ProfileSettings
+					open={openProfile}
+					handleClose={() => setOpenProfile(false)}
+					user={user}
+				/>
+			)}
 			<Box component='center' height='100%'>
 				<Box
 					sx={{ backgroundColor: 'teal' }}
