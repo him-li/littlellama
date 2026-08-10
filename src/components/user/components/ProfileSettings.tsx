@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, type FormEvent, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	Backdrop,
@@ -13,8 +13,14 @@ import {
 	Snackbar,
 } from '@/src/ui/mui';
 import { useSpring, animated } from '@react-spring/web';
-import { PUT } from '../../../utils/api';
+import { getApiErrorMessage, PUT } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
+import type { ModalProps, User } from '../../../types/models';
+
+interface ProfileSettingsProps extends ModalProps {
+	user: User;
+	handleClose: () => void;
+}
 
 const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	const {
@@ -23,7 +29,6 @@ const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 		onClick,
 		onEnter,
 		onExited,
-		// eslint-disable-next-line no-unused-vars
 		ownerState,
 		...other
 	} = props;
@@ -48,42 +53,42 @@ const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	);
 });
 
-export default function ProfileSettings({ open, handleClose, user }: any) {
+export default function ProfileSettings({ open, handleClose, user }: ProfileSettingsProps) {
 	const { t } = useTranslation();
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
-	const [email, setEmail] = useState('');
-	const [phone, setPhone] = useState('');
+	const [firstName, setFirstName] = useState(user.firstname ?? user.firstName ?? '');
+	const [lastName, setLastName] = useState(user.lastname ?? '');
+	const [email, setEmail] = useState(user.email ?? '');
+	const [phone, setPhone] = useState(user.phone ?? '');
 	const [password, setPassword] = useState('');
-	const [bio, setBio] = useState('');
+	const [bio, setBio] = useState(user.bio ?? '');
 	const [openSuccess, setOpenSuccess] = useState(false);
 	const [openError, setOpenError] = useState(false);
+	const [error, setError] = useState('');
 
-	const handleUpdateUser = async (e) => {
+	const handleUpdateUser = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const updatedUser = {
-			id: user.id,
-			firstname: firstName || user.firstname,
-			lastname: lastName || user.lastname,
-			email: email || user.email,
-			phone: phone || user.phone,
-			password: password || user.password,
+			firstname: firstName.trim(),
+			lastname: lastName.trim(),
+			email: email.trim(),
+			phone: phone.trim(),
 			bio,
+			...(password ? { password } : {}),
 		};
 		try {
 			await PUT(`/user/${user.id}`, updatedUser);
-			setTimeout(async () => {
-				setOpenSuccess(true);
+			setOpenSuccess(true);
+			window.setTimeout(() => {
 				handleClose();
 				window.location.reload();
 			}, 1000);
-		} catch (error) {
+		} catch (requestError) {
+			setError(getApiErrorMessage(requestError, t('message-profile-error')));
 			setOpenError(true);
-			console.error('Error updating user:', error);
 		}
 	};
 
-	const handleCloseAlert = (event, reason) => {
+	const handleCloseAlert = (_event?: SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') {
 			return;
 		}
@@ -115,7 +120,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 						<Typography component='h1' variant='h5'>
 							{t('profile-settings')}
 						</Typography>
-						<Box component='form' noValidate sx={{ mt: 3 }}>
+						<Box component='form' onSubmit={handleUpdateUser} noValidate sx={{ mt: 3 }}>
 							<Grid container spacing={2}>
 								<Grid size={{ xs: 12, sm: 6 }}>
 									<TextField
@@ -125,7 +130,6 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										fullWidth
 										id='firstName'
 										label={t('para-firstname')}
-										placeholder={user.firstname}
 										autoFocus
 										onChange={(e) => setFirstName(e.target.value)}
 										value={firstName}
@@ -137,7 +141,6 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										fullWidth
 										id='lastName'
 										label={t('para-lastname')}
-										placeholder={user.lastname}
 										name='lastName'
 										autoComplete='family-name'
 										onChange={(e) => setLastName(e.target.value)}
@@ -150,7 +153,6 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										fullWidth
 										id='email'
 										label={t('para-email')}
-										placeholder={user.email}
 										name='email'
 										autoComplete='email'
 										onChange={(e) => setEmail(e.target.value)}
@@ -181,6 +183,8 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										autoComplete='new-password'
 										onChange={(e) => setPassword(e.target.value)}
 										value={password}
+										error={password !== '' && password.length < 8}
+										helperText={password !== '' && password.length < 8 ? t('para-password-too-short') : ''}
 									/>
 								</Grid>
 								<Grid size={12}>
@@ -189,7 +193,6 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 										fullWidth
 										id='bio'
 										label={t('para-bio')}
-										placeholder={user.bio}
 										name='bio'
 										onChange={(e) => setBio(e.target.value)}
 										value={bio}
@@ -197,12 +200,12 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 								</Grid>
 							</Grid>
 							<Button
-								type='button'
+								type='submit'
 								fullWidth
 								variant='contained'
 								color='secondary'
-								onClick={handleUpdateUser}
 								sx={{ mt: 3, mb: 2 }}
+								disabled={!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim() || (password !== '' && password.length < 8)}
 							>
 								{t('button-save-changes')}
 							</Button>
@@ -216,7 +219,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 				onClose={handleCloseAlert}
 			>
 				<Alert onClose={handleCloseAlert} severity='success'>
-					Your profile has been updated successfully!
+					{t('message-profile-success')}
 				</Alert>
 			</Snackbar>
 			<Snackbar
@@ -225,7 +228,7 @@ export default function ProfileSettings({ open, handleClose, user }: any) {
 				onClose={handleCloseAlert}
 			>
 				<Alert onClose={handleCloseAlert} severity='error'>
-					Oops! Something went wrong. Please try to update again later.
+					{error || t('message-profile-error')}
 				</Alert>
 			</Snackbar>
 		</React.Fragment>

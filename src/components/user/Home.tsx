@@ -32,7 +32,7 @@ export default function Home({ user }: { user: User | null }) {
 		<>
 			<Signup open={openSignup} handleClose={() => setOpenSignup(false)} />
 			<Login open={openLogin} handleClose={() => setOpenLogin(false)} />
-			{user && <ProfileSettings open={openProfile} handleClose={() => setOpenProfile(false)} user={user} />}
+			{user && openProfile && <ProfileSettings open handleClose={() => setOpenProfile(false)} user={user} />}
 
 			<Box component='section' sx={{ position: 'relative', overflow: 'hidden', bgcolor: 'primary.dark', color: 'white', py: { xs: 7, md: 11 } }}>
 				<Box sx={{ position: 'absolute', inset: 0, opacity: .16, backgroundImage: 'radial-gradient(circle at 15% 20%, #fff 0 2px, transparent 3px)', backgroundSize: '34px 34px' }} />
@@ -41,7 +41,7 @@ export default function Home({ user }: { user: User | null }) {
 						<Stack spacing={2.5} sx={{ alignItems: 'flex-start' }}>
 							<Chip icon={<FavoriteRoundedIcon />} label={t('chip-adopt')} sx={{ bgcolor: 'rgba(255,255,255,.14)', color: 'white', '& .MuiChip-icon': { color: 'secondary.main' } }} />
 							<Typography variant='h1' sx={{ fontSize: { xs: '3.5rem', sm: '4.8rem', md: '5.8rem' }, maxWidth: 680 }}>
-								{user ? `${t('heading-hey')} ${user.firstname ?? ''}!` : t('heading-little-llama')}
+								{user ? `${t('heading-hey')} ${[user.firstname ?? user.firstName, user.lastname].filter(Boolean).join(' ')}!` : t('heading-little-llama')}
 							</Typography>
 							<Typography variant='h4' sx={{ color: 'secondary.light', fontSize: { xs: '1.8rem', md: '2.3rem' } }}>
 								{user ? t('heading-welcome') : t('heading-pet-adoption')}

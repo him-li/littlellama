@@ -10,7 +10,7 @@ import EditPet from '../components/admin/EditPet';
 import NotFound from '../components/components/NotFound';
 import type { User } from '../types/models';
 
-export default function Router({ user }: { user: User | null }) {
+export default function Router({ user, authResolved }: { user: User | null; authResolved: boolean }) {
 	const pathname = usePathname();
 	const petDetails = pathname.match(/^\/pets\/([^/]+)$/);
 	const editPet = pathname.match(/^\/pet\/([^/]+)\/edit$/);
@@ -19,6 +19,9 @@ export default function Router({ user }: { user: User | null }) {
 	if (pathname === '/pets') return <Pets user={user} />;
 	if (petDetails) return <PetDetails open petId={petDetails[1]} user={user} />;
 	if (pathname === '/search') return <Search user={user} />;
+	const adminRoute = pathname === '/addpet' || pathname === '/dashboard' || Boolean(editPet);
+	if (adminRoute && !authResolved) return null;
+	if (adminRoute && !user?.admin) return <NotFound />;
 	if (pathname === '/addpet') return <AddPet user={user} />;
 	if (editPet) return <EditPet petId={editPet[1]} user={user} />;
 	if (pathname === '/dashboard') return <Dashboard user={user} />;

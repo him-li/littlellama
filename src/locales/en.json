@@ -78,6 +78,8 @@
     "message-login-error":"Something went wrong. Please try to log in again later.",
     "message-signup-success":"Welcome to Little Llama, {{name}}!",
     "message-signup-error":"Something went wrong. Please try to sign up again later.",
+    "message-profile-success":"Your profile has been updated successfully!",
+    "message-profile-error":"Something went wrong. Please try to update your profile again.",
     "yes":"Yes",
     "no":"No",
     "para-hypoallergenic":"Hypoallergenic",

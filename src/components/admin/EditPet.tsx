@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
 	Avatar,
@@ -21,9 +20,7 @@ import littleLlama from '../../assets/littleLlama.png';
 export default function EditPet({ user, petId }: any) {
 	const { t } = useTranslation();
 	const steps = [t('step-edit-info'), t('step-upload-picture'), t('step-review')];
-	const router = useRouter();
 	const id = petId;
-	console.log(id);
 	const [activeStep, setActiveStep] = useState(0);
 	const [formData, setFormData] = useState({
 		type: '',
@@ -41,19 +38,12 @@ export default function EditPet({ user, petId }: any) {
 	});
 
 	useEffect(() => {
-		if (user?.admin === false) {
-			router.replace('/not-found');
-		} else {
-			const petData = async () => {
-				const data = await GET(`/pet/${id}`);
-				if (!data) {
-					return;
-				}
-				setFormData(data);
-			};
-			petData();
-		}
-	}, [user, router, id]);
+		const petData = async () => {
+			const data = await GET(`/pet/${id}`);
+			if (data) setFormData(data);
+		};
+		void petData();
+	}, [id]);
 
 	const handleNext = () => {
 		setActiveStep(activeStep + 1);
@@ -75,8 +65,7 @@ export default function EditPet({ user, petId }: any) {
 		body.append('hypoallergenic', String(formData.hypoallergenic));
 		body.append('dietary_restrictions', formData.dietary_restrictions);
 		body.append('breed', formData.breed);
-		if (formData.image) body.append('image', formData.image);
-		console.log('This is body', body);
+		if (formData.picture instanceof File) body.append('image', formData.picture);
 		const data = await PUT(`/pet/${id}`, body);
 		if (!data) {
 			return;
@@ -87,9 +76,10 @@ export default function EditPet({ user, petId }: any) {
 	return (
 		<Box height='100vh' bgcolor='teal'>
 			<Card sx={style}>
-				{formData.picture && (
+				{typeof formData.picture === 'string' && formData.picture && (
 					<img
-						src={URL.createObjectURL(new Blob([formData.picture]))}
+						src={formData.picture}
+						alt=''
 						style={{
 							opacity: 1,
 							position: 'absolute',

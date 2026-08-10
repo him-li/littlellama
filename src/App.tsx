@@ -10,6 +10,7 @@ import type { User } from './types/models';
 
 export default function App() {
 	const [user, setUser] = useState<User | null>(null);
+	const [authResolved, setAuthResolved] = useState(false);
 
 	useEffect(() => {
 		fetchCurrentUser();
@@ -26,13 +27,15 @@ export default function App() {
 			}
 		} catch (error) {
 			console.log('Error fetching current user', error);
+		} finally {
+			setAuthResolved(true);
 		}
 	};
 
 	return (
 		<Stack sx={{ minHeight: '100vh' }}>
 			<Navbar user={user} />
-			<Router user={user} />
+				<Router user={user} authResolved={authResolved} />
 			<Footer />
 		</Stack>
 	);

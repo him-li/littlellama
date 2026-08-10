@@ -78,6 +78,8 @@
   "message-login-error": "משהו השתבש. נסו להתחבר שוב מאוחר יותר.",
   "message-signup-success": "ברוכים הבאים ללאמה קטנה, {{name}}!",
   "message-signup-error": "משהו השתבש. נסו להירשם שוב מאוחר יותר.",
+  "message-profile-success": "הפרופיל עודכן בהצלחה!",
+  "message-profile-error": "עדכון הפרופיל נכשל. נסו שוב.",
   "yes": "כן",
   "no": "לא",
   "para-hypoallergenic": "היפואלרגני",

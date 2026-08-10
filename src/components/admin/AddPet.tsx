@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
 	Avatar,
@@ -21,7 +20,6 @@ import littleLlama from '../../assets/littleLlama.png';
 export default function AddPet({ user }: any) {
 	const { t } = useTranslation();
 	const steps = [t('step-add-info'), t('step-upload-picture'), t('step-review')];
-	const router = useRouter();
 	const [activeStep, setActiveStep] = useState(0);
 	const [formData, setFormData] = useState({
 		type: '',
@@ -36,12 +34,6 @@ export default function AddPet({ user }: any) {
 		breed: '',
 		picture: null,
 	});
-
-	useEffect(() => {
-		if (user?.admin === false) {
-			router.replace('/not-found');
-		}
-	}, [user, router]);
 
 	const handleNext = () => {
 		setActiveStep(activeStep + 1);
@@ -64,7 +56,6 @@ export default function AddPet({ user }: any) {
 		body.append('dietary_restrictions', formData.dietary_restrictions);
 		body.append('breed', formData.breed);
 		if (formData.picture) body.append('picture', formData.picture);
-		console.log('This is body', body);
 		const data = await POST('/pet', body);
 		if (!data) {
 			return;
@@ -75,20 +66,6 @@ export default function AddPet({ user }: any) {
 	return (
 		<Box height='100vh' bgcolor='teal'>
 			<Card sx={style}>
-				{formData.picture && (
-					<img
-						src={URL.createObjectURL(new Blob([formData.picture]))}
-						style={{
-							opacity: 1,
-							position: 'absolute',
-							bottom: 0,
-							width: '100%',
-							height: '100%',
-							zIndex: 0,
-							filter: 'blur(50px)',
-						}}
-					/>
-				)}
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main', zIndex: 1 }}>
 					<img src={littleLlama.src} height={75} alt='' />
 				</Avatar>

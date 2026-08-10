@@ -78,6 +78,8 @@
   "message-login-error": "صار إشي غلط. جرّب تفوت كمان شوي.",
   "message-signup-success": "أهلين فيك بليتل لاما، {{name}}!",
   "message-signup-error": "صار إشي غلط. جرّب تعمل الحساب كمان شوي.",
+  "message-profile-success": "تعدّلت معلومات حسابك بنجاح!",
+  "message-profile-error": "ما زبط تعديل حسابك. جرّب كمان مرة.",
   "yes": "آه",
   "no": "لأ",
   "para-hypoallergenic": "مناسب للحساسية",

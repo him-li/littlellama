@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
@@ -58,18 +57,13 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 export default function Dashboard({ user }: any) {
 	const { t } = useTranslation();
 	const theme = useTheme();
-	const router = useRouter();
 	const [value, setValue] = useState(0);
 	const [users, setUsers] = useState([]);
 	const [petsData, setPetsData] = useState([]);
 
 	useEffect(() => {
-		if (user?.admin === false) {
-			router.replace('/not-found');
-		}
-		fetchUsers();
-		fetchPets();
-	}, [user, router]);
+		void Promise.all([fetchUsers(), fetchPets()]);
+	}, []);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -77,7 +71,6 @@ export default function Dashboard({ user }: any) {
 
 	const fetchUsers = async () => {
 		const res = await GET('/user');
-		console.log(res);
 		setUsers(res);
 		return res;
 	};
@@ -118,6 +111,7 @@ export default function Dashboard({ user }: any) {
 						<Grid item flexGrow={1} xs='auto' md={4} position='relative'>
 							<img
 								src={walkingLlama.src}
+								alt=''
 								width='100%'
 								style={{
 									borderRadius: 5,

@@ -78,6 +78,8 @@
     "message-login-error":"登入失敗，請稍後重試。",
     "message-signup-success":"歡迎加入小羊駝，{{name}}！",
     "message-signup-error":"註冊失敗，請稍後重試。",
+    "message-profile-success":"個人資料已成功更新！",
+    "message-profile-error":"更新個人資料失敗，請重試。",
     "yes":"是",
     "no":"否",
     "para-hypoallergenic":"低敏",
