@@ -40,16 +40,4 @@ i18n
     defaultNS: "translation"
   });
 
-const syncDocumentDirection = (language: string) => {
-  if (typeof document === 'undefined') return;
-  const languageCode = language.split('-')[0];
-  document.documentElement.lang = languageCode;
-  document.documentElement.dir = ['ar', 'he'].includes(languageCode) ? 'rtl' : 'ltr';
-  document.body?.setAttribute('dir', document.documentElement.dir);
-  localStorage.setItem('littlellama-language', language);
-};
-
-syncDocumentDirection(i18n.language);
-i18n.on('languageChanged', syncDocumentDirection);
-
 export default i18n;

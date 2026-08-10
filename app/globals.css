@@ -1,4 +1,31 @@
-:root { color-scheme: light; font-synthesis: none; text-rendering: optimizeLegibility; }
+:root {
+	color-scheme: light;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	--font-script-primary: var(--font-cjk-sc);
+	--font-script-secondary: var(--font-cjk-tc);
+	--font-script-tertiary: var(--font-hebrew);
+	--font-script-quaternary: var(--font-arabic);
+}
+html[lang='zh-Hans'], html[lang='zh'] {
+	--font-script-primary: var(--font-cjk-sc);
+	--font-script-secondary: var(--font-cjk-tc);
+}
+html[lang='zh-Hant'] {
+	--font-script-primary: var(--font-cjk-tc);
+	--font-script-secondary: var(--font-cjk-sc);
+}
+html[lang='he'] {
+	--font-script-primary: var(--font-hebrew);
+	--font-script-secondary: var(--font-cjk-sc);
+	--font-script-tertiary: var(--font-cjk-tc);
+}
+html[lang='ar'] {
+	--font-script-primary: var(--font-arabic);
+	--font-script-secondary: var(--font-cjk-sc);
+	--font-script-tertiary: var(--font-cjk-tc);
+	--font-script-quaternary: var(--font-hebrew);
+}
 * { box-sizing: border-box; }
 html { min-height: 100%; scroll-behavior: smooth; }
 body { margin: 0; min-height: 100%; background: #fbfaf6; color: #18201f; }

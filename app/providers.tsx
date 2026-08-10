@@ -1,20 +1,21 @@
 'use client';
 
+import { useEffect } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import '../src/utils/i18n';
+import i18n from '../src/utils/i18n';
 import type { PropsWithChildren } from 'react';
 
 const theme = createTheme({
 	cssVariables: true,
 	shape: { borderRadius: 16 },
 	typography: {
-		fontFamily: 'var(--font-karla), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Arial, sans-serif',
-		h1: { fontFamily: 'var(--font-markazi), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Georgia, serif', fontWeight: 700, lineHeight: 0.95 },
-		h2: { fontFamily: 'var(--font-markazi), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Georgia, serif', fontWeight: 700, lineHeight: 1 },
-		h3: { fontFamily: 'var(--font-markazi), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Georgia, serif', fontWeight: 650, lineHeight: 1.08 },
-		h4: { fontFamily: 'var(--font-markazi), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Georgia, serif', fontWeight: 650 },
+		fontFamily: 'var(--font-karla), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Arial, sans-serif',
+		h1: { fontFamily: 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif', fontWeight: 700, lineHeight: 0.95 },
+		h2: { fontFamily: 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif', fontWeight: 700, lineHeight: 1 },
+		h3: { fontFamily: 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif', fontWeight: 650, lineHeight: 1.08 },
+		h4: { fontFamily: 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif', fontWeight: 650 },
 		button: { fontWeight: 700, textTransform: 'none', letterSpacing: 0 },
 	},
 	palette: {
@@ -43,5 +44,20 @@ const theme = createTheme({
 });
 
 export default function Providers({ children }: PropsWithChildren) {
+	useEffect(() => {
+		const syncDocumentLanguage = (language: string) => {
+			const htmlLanguage = language === 'zh_hans' ? 'zh-Hans' : language === 'zh_hant' ? 'zh-Hant' : language.split('-')[0];
+			const direction = ['ar', 'he'].includes(htmlLanguage) ? 'rtl' : 'ltr';
+			document.documentElement.lang = htmlLanguage;
+			document.documentElement.dir = direction;
+			document.body.dir = direction;
+			localStorage.setItem('littlellama-language', language);
+		};
+
+		syncDocumentLanguage(i18n.language);
+		i18n.on('languageChanged', syncDocumentLanguage);
+		return () => { i18n.off('languageChanged', syncDocumentLanguage); };
+	}, []);
+
 	return <AppRouterCacheProvider options={{ enableCssLayer: true }}><ThemeProvider theme={theme}><CssBaseline />{children}</ThemeProvider></AppRouterCacheProvider>;
 }

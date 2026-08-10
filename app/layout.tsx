@@ -1,4 +1,4 @@
-import { Assistant, IBM_Plex_Sans_Arabic, Karla, Markazi_Text, Noto_Sans_SC, Noto_Sans_TC } from 'next/font/google';
+import { Assistant, IBM_Plex_Sans_Arabic, Karla, Lora, Noto_Sans_SC, Noto_Sans_TC } from 'next/font/google';
 import './globals.css';
 import Providers from './providers';
 import type { PropsWithChildren } from 'react';
@@ -9,9 +9,9 @@ const karla = Karla({
 	display: 'swap',
 });
 
-const markaziText = Markazi_Text({
-	subsets: ['arabic', 'latin'],
-	variable: '--font-markazi',
+const heading = Lora({
+	subsets: ['latin'],
+	variable: '--font-heading',
 	display: 'swap',
 });
 
@@ -27,7 +27,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
 	return (
-		<html lang='en' className={`${karla.variable} ${markaziText.variable} ${simplifiedChinese.variable} ${traditionalChinese.variable} ${assistant.variable} ${ibmPlexArabic.variable}`}>
+		<html lang='en' className={`${karla.variable} ${heading.variable} ${simplifiedChinese.variable} ${traditionalChinese.variable} ${assistant.variable} ${ibmPlexArabic.variable}`}>
 			<body><Providers>{children}</Providers></body>
 		</html>
 	);
