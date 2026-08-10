@@ -16,7 +16,7 @@ import {
 	Alert,
 } from '@/src/ui/mui';
 import { useSpring, animated } from '@react-spring/web';
-import { POST } from '../../../utils/api';
+import { getApiErrorMessage, POST } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
 
 const Fade = React.forwardRef(function Fade(props: any, ref: any) {
@@ -58,25 +58,21 @@ export default function Login({ open, handleClose }: any) {
 	const [openSuccess, setOpenSuccess] = useState(false);
 	const [openError, setOpenError] = useState(false);
 	const [error, setError] = useState('');
+	const emailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		try {
 			const { token } = await POST('/login', { email, password });
 			localStorage.setItem('USER', JSON.stringify(token));
-			console.log('Token saved in localStorage:', localStorage.getItem('USER'));
-			if (localStorage.getItem('USER')) {
-				setOpenSuccess(true);
-				setTimeout(async () => {
-					handleClose();
-					window.location.reload();
-				}, 1000);
-			} else {
-				setOpenError(true);
-			}
-		} catch (error) {
-			console.log(error.response.data);
-			setError(error.response.data.message);
+			setOpenSuccess(true);
+			window.setTimeout(() => {
+				handleClose();
+				window.location.reload();
+			}, 1000);
+		} catch (requestError) {
+			setError(getApiErrorMessage(requestError, t('message-login-error')));
+			setOpenError(true);
 		}
 	};
 
@@ -112,7 +108,7 @@ export default function Login({ open, handleClose }: any) {
 						<Typography component='h1' variant='h5'>
 							{t('button-login')}
 						</Typography>
-						<Box component='form' noValidate sx={{ mt: 1 }}>
+						<Box component='form' onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
 							<TextField
 								margin='normal'
 								color='secondary'
@@ -125,13 +121,9 @@ export default function Login({ open, handleClose }: any) {
 								autoFocus
 								onChange={(e) => setEmail(e.target.value)}
 								value={email}
-								error={
-									email !== '' &&
-									!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
-								}
+								error={email !== '' && !emailValid}
 								helperText={
-									email !== '' &&
-									!/^([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i.test(email)
+									email !== '' && !emailValid
 										? t('para-invalid-email')
 										: ''
 								}
@@ -158,11 +150,10 @@ export default function Login({ open, handleClose }: any) {
 								fullWidth
 								variant='contained'
 								color='secondary'
-								onClick={handleLogin}
 								sx={{ mt: 3, mb: 2 }}
 								disabled={
 									email === '' ||
-									!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email) ||
+									!emailValid ||
 									password === ''
 								}
 							>

@@ -96,5 +96,6 @@
     "step-review":"確認詳情",
     "action-next":"下一步",
     "pets-owned":"已領養寵物",
-    "pets-saved":"已收藏寵物"
+    "pets-saved":"已收藏寵物",
+    "para-password-too-short":"密碼至少需要 8 個字元"
 }

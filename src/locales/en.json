@@ -96,5 +96,6 @@
     "step-review":"Review details",
     "action-next":"Next",
     "pets-owned":"Pets owned",
-    "pets-saved":"Pets saved"
+    "pets-saved":"Pets saved",
+    "para-password-too-short":"Password must be at least 8 characters"
 }

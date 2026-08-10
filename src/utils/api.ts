@@ -12,6 +12,19 @@ const requestConfig = (): AxiosRequestConfig => ({
 	},
 });
 
+export const getApiErrorMessage = (error: unknown, fallback: string): string => {
+	if (!axios.isAxiosError(error)) return fallback;
+	const detail = error.response?.data?.detail;
+	if (typeof detail === 'string') return detail;
+	if (Array.isArray(detail)) {
+		return detail
+			.map((item) => (typeof item?.msg === 'string' ? item.msg.replace(/^Value error, /, '') : ''))
+			.filter(Boolean)
+			.join(' ');
+	}
+	return fallback;
+};
+
 export const GET = async <T = any>(
 	url: string,
 	params: Record<string, unknown> = {},

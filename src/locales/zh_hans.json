@@ -96,5 +96,6 @@
     "step-review":"确认详情",
     "action-next":"下一步",
     "pets-owned":"已领养宠物",
-    "pets-saved":"已收藏宠物"
+    "pets-saved":"已收藏宠物",
+    "para-password-too-short":"密码至少需要 8 个字符"
 }

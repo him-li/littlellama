@@ -16,7 +16,7 @@ import {
 	Alert,
 } from '@/src/ui/mui';
 import { useSpring, animated } from '@react-spring/web';
-import { POST } from '../../../utils/api';
+import { getApiErrorMessage, POST } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
 
 const Fade = React.forwardRef(function Fade(props: any, ref: any) {
@@ -61,6 +61,9 @@ export default function Signup({ open, handleClose }: any) {
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [openSuccess, setOpenSuccess] = useState(false);
 	const [openError, setOpenError] = useState(false);
+	const [error, setError] = useState('');
+	const emailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
+	const passwordValid = password.length >= 8;
 
 	const handleSignup = async (e) => {
 		e.preventDefault();
@@ -70,14 +73,18 @@ export default function Signup({ open, handleClose }: any) {
 			email,
 			phone,
 			password,
+			confirmPassword,
 		};
-		const data = await POST('/signup', body);
-		if (data) {
+		try {
+			const { token } = await POST<{ token: string }>('/signup', body);
+			localStorage.setItem('USER', JSON.stringify(token));
 			setOpenSuccess(true);
-			setTimeout(async () => {
+			window.setTimeout(() => {
 				handleClose();
+				window.location.reload();
 			}, 1000);
-		} else {
+		} catch (requestError) {
+			setError(getApiErrorMessage(requestError, t('message-signup-error')));
 			setOpenError(true);
 		}
 	};
@@ -113,7 +120,7 @@ export default function Signup({ open, handleClose }: any) {
 						<Typography component='h1' variant='h5'>
 							{t('button-signup')}
 						</Typography>
-						<Box component='form' noValidate sx={{ mt: 3 }}>
+						<Box component='form' onSubmit={handleSignup} noValidate sx={{ mt: 3 }}>
 							<Grid container spacing={2}>
 								<Grid size={{ xs: 12, sm: 6 }}>
 									<TextField
@@ -153,13 +160,9 @@ export default function Signup({ open, handleClose }: any) {
 										autoComplete='email'
 										onChange={(e) => setEmail(e.target.value)}
 										value={email}
-										error={
-											email !== '' &&
-											!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
-										}
+										error={email !== '' && !emailValid}
 										helperText={
-											email !== '' &&
-											!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
+											email !== '' && !emailValid
 												? t('para-invalid-email')
 												: ''
 										}
@@ -167,6 +170,7 @@ export default function Signup({ open, handleClose }: any) {
 								</Grid>
 								<Grid size={12}>
 									<TextField
+										required
 										color='secondary'
 										fullWidth
 										name='phone'
@@ -190,6 +194,8 @@ export default function Signup({ open, handleClose }: any) {
 										autoComplete='new-password'
 										onChange={(e) => setPassword(e.target.value)}
 										value={password}
+										error={password !== '' && !passwordValid}
+										helperText={password !== '' && !passwordValid ? t('para-password-too-short') : ''}
 									/>
 								</Grid>
 								<Grid size={12}>
@@ -225,15 +231,15 @@ export default function Signup({ open, handleClose }: any) {
 								fullWidth
 								variant='contained'
 								color='secondary'
-								onClick={handleSignup}
 								sx={{ mt: 3, mb: 2 }}
 								disabled={
 									password !== confirmPassword ||
 									firstName === '' ||
 									lastName === '' ||
 									email === '' ||
-									!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email) ||
-									password === '' ||
+									!emailValid ||
+									phone.trim() === '' ||
+									!passwordValid ||
 									confirmPassword === ''
 								}
 							>
@@ -265,7 +271,7 @@ export default function Signup({ open, handleClose }: any) {
 				onClose={handleCloseAlert}
 			>
 				<Alert onClose={handleCloseAlert} severity='error'>
-					{t('message-signup-error')}
+					{error || t('message-signup-error')}
 				</Alert>
 			</Snackbar>
 		</React.Fragment>

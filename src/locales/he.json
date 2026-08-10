@@ -96,5 +96,6 @@
   "step-review": "בדיקת הפרטים",
   "action-next": "הבא",
   "pets-owned": "חיות מחמד שאומצו",
-  "pets-saved": "חיות מחמד שנשמרו"
+  "pets-saved": "חיות מחמד שנשמרו",
+  "para-password-too-short": "הסיסמה חייבת להכיל לפחות 8 תווים"
 }

@@ -96,5 +96,6 @@
   "step-review": "راجع التفاصيل",
   "action-next": "اللي بعده",
   "pets-owned": "حيوانات متبنّية",
-  "pets-saved": "حيوانات محفوظة"
+  "pets-saved": "حيوانات محفوظة",
+  "para-password-too-short": "كلمة السر لازم تكون ٨ خانات عالأقل"
 }
