@@ -139,7 +139,7 @@ export default function EditPet({ user, petId }: any) {
 									setFormData({ ...formData, name: '', picture: null });
 									setActiveStep(0);
 								}}
-								sx={{ mt: 3, ml: 1 }}
+								sx={{ mt: 3, marginInlineStart: 1 }}
 							>
 								Add Another Pet
 							</Button>
@@ -162,7 +162,7 @@ export default function EditPet({ user, petId }: any) {
 										onClick={handleBack}
 										variant='contained'
 										color='secondary'
-										sx={{ mt: 3, ml: 1 }}
+										sx={{ mt: 3, marginInlineStart: 1 }}
 									>
 										Back
 									</Button>
@@ -173,7 +173,7 @@ export default function EditPet({ user, petId }: any) {
 									onClick={
 										activeStep === steps.length - 1 ? handleAddPet : handleNext
 									}
-									sx={{ mt: 3, ml: 1 }}
+									sx={{ mt: 3, marginInlineStart: 1 }}
 								>
 									{activeStep === steps.length - 1 ? t('button-save-changes') : t('action-next')}
 								</Button>

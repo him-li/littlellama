@@ -4,18 +4,26 @@ import { useEffect } from 'react';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { MotionConfig } from 'motion/react';
 import i18n from '../src/utils/i18n';
 import type { PropsWithChildren } from 'react';
+
+const headingFontFamily = 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif';
+const desktopHeading = '@media (min-width:900px)';
 
 const theme = createTheme({
 	cssVariables: true,
 	shape: { borderRadius: 16 },
 	typography: {
 		fontFamily: 'var(--font-karla), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Arial, sans-serif',
-		h1: { fontFamily: 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif', fontWeight: 700, lineHeight: 0.95 },
-		h2: { fontFamily: 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif', fontWeight: 700, lineHeight: 1 },
-		h3: { fontFamily: 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif', fontWeight: 650, lineHeight: 1.08 },
-		h4: { fontFamily: 'var(--font-heading), var(--font-script-primary), var(--font-script-secondary), var(--font-script-tertiary), var(--font-script-quaternary), Georgia, serif', fontWeight: 650 },
+		fontSize: 16,
+		body1: { fontSize: '1rem', lineHeight: 1.6 },
+		h1: { fontFamily: headingFontFamily, fontSize: '3.1rem', fontWeight: 700, lineHeight: 0.98, [desktopHeading]: { fontSize: '4.5rem' } },
+		h2: { fontFamily: headingFontFamily, fontSize: '2.5rem', fontWeight: 700, lineHeight: 1.04, [desktopHeading]: { fontSize: '3.4rem' } },
+		h3: { fontFamily: headingFontFamily, fontSize: '2.25rem', fontWeight: 650, lineHeight: 1.08, [desktopHeading]: { fontSize: '2.7rem' } },
+		h4: { fontFamily: headingFontFamily, fontSize: '1.8rem', fontWeight: 650, lineHeight: 1.16, [desktopHeading]: { fontSize: '2rem' } },
+		h5: { fontFamily: headingFontFamily, fontSize: '1.35rem', fontWeight: 650, lineHeight: 1.2 },
+		h6: { fontFamily: headingFontFamily, fontSize: '1.125rem', fontWeight: 650, lineHeight: 1.25 },
 		button: { fontWeight: 700, textTransform: 'none', letterSpacing: 0 },
 	},
 	palette: {
@@ -28,7 +36,7 @@ const theme = createTheme({
 	components: {
 		MuiButton: {
 			defaultProps: { disableElevation: true },
-			styleOverrides: { root: { borderRadius: 999, paddingInline: 22, minHeight: 44 } },
+			styleOverrides: { root: { borderRadius: 999, paddingInline: 22, minHeight: 44, transition: 'background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease', '&:active': { transform: 'translateY(1px)' } } },
 		},
 		MuiCard: { styleOverrides: { root: { border: '1px solid rgba(24,32,31,.08)', borderRadius: 16 } } },
 		MuiPaper: { styleOverrides: { rounded: { borderRadius: 16 } } },
@@ -59,5 +67,5 @@ export default function Providers({ children }: PropsWithChildren) {
 		return () => { i18n.off('languageChanged', syncDocumentLanguage); };
 	}, []);
 
-	return <AppRouterCacheProvider options={{ enableCssLayer: true }}><ThemeProvider theme={theme}><CssBaseline />{children}</ThemeProvider></AppRouterCacheProvider>;
+	return <AppRouterCacheProvider options={{ enableCssLayer: true }}><ThemeProvider theme={theme}><CssBaseline /><MotionConfig reducedMotion='user'>{children}</MotionConfig></ThemeProvider></AppRouterCacheProvider>;
 }

@@ -13,7 +13,7 @@ export default function Footer() {
 	return (
 		<Box component='footer' sx={{ mt: 'auto', py: 3.5, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
 			<Container maxWidth='lg'>
-				<Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between' }}>
+				<Stack direction={{ xs: 'column', sm: 'row' }} sx={{ gap: 2, alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between' }}>
 					<Box>
 						<Typography variant='h5' color='primary.main'>{t('heading-little-llama')}</Typography>
 						<Typography variant='body2' color='text.secondary'>© {new Date().getFullYear()} {t('para-xin')}</Typography>

@@ -104,7 +104,7 @@ export default function Dashboard({ user }: any) {
 							>
 								Admin Dashboard
 							</Typography>
-							<Typography align='left'>
+							<Typography sx={{ textAlign: 'start' }}>
 								Toggle the tabs to view all users and pets in the database.
 							</Typography>
 						</Grid>
@@ -117,7 +117,7 @@ export default function Dashboard({ user }: any) {
 									borderRadius: 5,
 									position: 'absolute',
 									top: '0',
-									left: '0',
+									insetInlineStart: '0',
 								}}
 							/>
 						</Grid>

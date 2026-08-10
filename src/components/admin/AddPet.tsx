@@ -113,7 +113,7 @@ export default function AddPet({ user }: any) {
 									setFormData({ ...formData, name: '', picture: null });
 									setActiveStep(0);
 								}}
-								sx={{ mt: 3, ml: 1 }}
+								sx={{ mt: 3, marginInlineStart: 1 }}
 							>
 								Add Another Pet
 							</Button>
@@ -136,7 +136,7 @@ export default function AddPet({ user }: any) {
 										onClick={handleBack}
 										variant='contained'
 										color='secondary'
-										sx={{ mt: 3, ml: 1 }}
+										sx={{ mt: 3, marginInlineStart: 1 }}
 									>
 										Back
 									</Button>
@@ -147,7 +147,7 @@ export default function AddPet({ user }: any) {
 									onClick={
 										activeStep === steps.length - 1 ? handleAddPet : handleNext
 									}
-									sx={{ mt: 3, ml: 1 }}
+									sx={{ mt: 3, marginInlineStart: 1 }}
 								>
 									{activeStep === steps.length - 1 ? t('link-addpet') : t('action-next')}
 								</Button>

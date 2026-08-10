@@ -11,8 +11,8 @@ import {
 	Grid,
 	Alert,
 	Snackbar,
+	Grow,
 } from '@/src/ui/mui';
-import { useSpring, animated } from '@react-spring/web';
 import { getApiErrorMessage, PUT } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
 import type { ModalProps, User } from '../../../types/models';
@@ -21,37 +21,6 @@ interface ProfileSettingsProps extends ModalProps {
 	user: User;
 	handleClose: () => void;
 }
-
-const Fade = React.forwardRef(function Fade(props: any, ref: any) {
-	const {
-		children,
-		in: open,
-		onClick,
-		onEnter,
-		onExited,
-		ownerState,
-		...other
-	} = props;
-	const style = useSpring({
-		from: { opacity: 0 },
-		to: { opacity: open ? 1 : 0 },
-		onStart: () => {
-			if (open && onEnter) {
-				onEnter(null, true);
-			}
-		},
-		onRest: () => {
-			if (!open && onExited) {
-				onExited(null, true);
-			}
-		},
-	});
-	return (
-		<animated.div ref={ref} style={style} {...other}>
-			{React.cloneElement(children, { onClick })}
-		</animated.div>
-	);
-});
 
 export default function ProfileSettings({ open, handleClose, user }: ProfileSettingsProps) {
 	const { t } = useTranslation();
@@ -107,7 +76,7 @@ export default function ProfileSettings({ open, handleClose, user }: ProfileSett
 				closeAfterTransition
 				slots={{ backdrop: Backdrop }}
 			>
-				<Fade in={open}>
+				<Grow in={open} timeout={{ enter: 280, exit: 180 }}>
 					<Box sx={style}>
 						<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
 							<Box component='img' src={littleLlama.src} height={75} alt='' />
@@ -206,7 +175,7 @@ export default function ProfileSettings({ open, handleClose, user }: ProfileSett
 							</Button>
 						</Box>
 					</Box>
-				</Fade>
+				</Grow>
 			</Modal>
 			<Snackbar
 				open={openSuccess}

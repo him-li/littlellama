@@ -34,7 +34,7 @@ interface DetailItemProps {
 
 function DetailItem({ icon, label, value }: DetailItemProps) {
 	return (
-		<Stack direction='row' spacing={1.5} sx={{ alignItems: 'center', minWidth: 0 }}>
+		<Stack direction='row' sx={{ gap: 1.5, alignItems: 'center', minWidth: 0 }}>
 			<Box sx={{ display: 'grid', placeItems: 'center', width: 38, height: 38, flexShrink: 0, borderRadius: 2, bgcolor: 'primary.light', color: 'primary.main' }}>{icon}</Box>
 			<Box sx={{ minWidth: 0 }}>
 				<Typography variant='caption' color='text.secondary'>{label}</Typography>
@@ -106,6 +106,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 			anchor='bottom'
 			open={open}
 			onClose={closeDetails}
+			transitionDuration={{ enter: 360, exit: 240 }}
 			slotProps={{
 				paper: { sx: {
 					maxHeight: '92dvh', borderRadius: '16px 16px 0 0', overflow: 'hidden',
@@ -122,8 +123,8 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 						<Box sx={{ maxWidth: 1120, mx: 'auto', px: { xs: 2, sm: 3, md: 4 }, pt: 1, pb: 3 }}>
 							<Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
 								<Box>
-									<Stack direction='row' spacing={1} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
-										<Typography id='pet-detail-title' variant='h2' sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' } }}>{pet.name}</Typography>
+									<Stack direction='row' sx={{ gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+										<Typography id='pet-detail-title' variant='h2'>{pet.name}</Typography>
 										<Chip size='small' label={pet.adoption_status} color={pet.adoption_status === 'Available' ? 'primary' : 'default'} />
 									</Stack>
 									<Typography color='text.secondary'>{[pet.breed, pet.type].filter(Boolean).join(' · ')}</Typography>
@@ -134,7 +135,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 							<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(320px, .9fr) minmax(0, 1.1fr)' }, gap: { xs: 2.5, md: 4 }, alignItems: 'start' }}>
 								<Box component='img' src={pet.picture || '/favicon.ico'} alt={pet.name} sx={{ width: '100%', aspectRatio: { xs: '4 / 3', sm: '16 / 10' }, maxHeight: 470, objectFit: 'cover', borderRadius: 2, bgcolor: 'primary.light' }} />
 								<Stack spacing={2.5}>
-									<Box><Typography variant='overline' color='primary.main' fontWeight={800}>{t('para-bio')}</Typography><Typography sx={{ mt: .5, fontSize: '1.05rem', lineHeight: 1.7 }}>{pet.bio}</Typography></Box>
+									<Box><Typography variant='overline' color='primary.main' fontWeight={800}>{t('para-bio')}</Typography><Typography sx={{ mt: .5 }}>{pet.bio}</Typography></Box>
 									<Divider />
 									<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' }, gap: 2 }}>{detailItems.map((item) => <DetailItem key={item.label} {...item} />)}</Box>
 								</Stack>
@@ -142,7 +143,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 						</Box>
 					</Box>
 					<Divider />
-					<Stack direction='row' spacing={1} sx={{ maxWidth: 1120, width: '100%', mx: 'auto', p: { xs: 1.5, sm: 2 }, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+					<Stack direction='row' sx={{ gap: 1, maxWidth: 1120, width: '100%', mx: 'auto', p: { xs: 1.5, sm: 2 }, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
 						{user && isOwner && pet.adoption_status !== 'Available' ? <Button startIcon={<UndoIcon />} onClick={() => void handleReturn()}>{t('action-return')}</Button> : null}
 						{user && canAdopt ? <Button variant='contained' startIcon={<AddHomeIcon />} onClick={() => void handleAdopt()}>{t('action-adopt')}</Button> : null}
 						{user && isAvailable ? <Button variant='outlined' startIcon={<PetsIcon />} onClick={() => void handleFoster()}>{t('action-foster')}</Button> : null}
