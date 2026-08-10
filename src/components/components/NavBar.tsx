@@ -2,11 +2,16 @@ import { useState, type MouseEvent } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
-	AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem,
+	AppBar, Avatar, Box, Button, Container, IconButton, ListItemIcon, Menu, MenuItem,
 	Stack, Toolbar, Tooltip, Typography,
 } from '@/src/ui/mui';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSettingsRounded';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import PetsRoundedIcon from '@mui/icons-material/PetsRounded';
+import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import littleLlama from '../../assets/littleLlama.png';
 import type { User } from '../../types/models';
 
@@ -16,9 +21,9 @@ export default function Navbar({ user }: { user: User | null }) {
 	const [navAnchor, setNavAnchor] = useState<HTMLElement | null>(null);
 	const [adminAnchor, setAdminAnchor] = useState<HTMLElement | null>(null);
 	const pages = [
-		{ label: t('link-home'), href: '/' },
-		{ label: t('text-search'), href: '/search' },
-		{ label: user ? t('link-mypets') : t('link-pets'), href: user ? '/mypets' : '/pets' },
+		{ label: t('link-home'), href: '/', icon: <HomeRoundedIcon fontSize='small' /> },
+		{ label: t('text-search'), href: '/search', icon: <SearchRoundedIcon fontSize='small' /> },
+		{ label: user ? t('link-mypets') : t('link-pets'), href: user ? '/mypets' : '/pets', icon: <PetsRoundedIcon fontSize='small' /> },
 	];
 	const navigate = (href: string) => {
 		setNavAnchor(null);
@@ -39,7 +44,7 @@ export default function Navbar({ user }: { user: User | null }) {
 
 					<Stack direction='row' spacing={0.5} sx={{ ml: 'auto', display: { xs: 'none', md: 'flex' } }}>
 						{pages.map((page) => (
-							<Button key={page.href} href={page.href} color={pathname === page.href ? 'primary' : 'inherit'} sx={{ bgcolor: pathname === page.href ? 'primary.light' : 'transparent' }}>
+							<Button key={page.href} href={page.href} startIcon={page.icon} color={pathname === page.href ? 'primary' : 'inherit'} sx={{ bgcolor: pathname === page.href ? 'primary.light' : 'transparent' }}>
 								{page.label}
 							</Button>
 						))}
@@ -53,8 +58,8 @@ export default function Navbar({ user }: { user: User | null }) {
 								</IconButton>
 							</Tooltip>
 							<Menu anchorEl={adminAnchor} open={Boolean(adminAnchor)} onClose={() => setAdminAnchor(null)}>
-								<MenuItem onClick={() => navigate('/addpet')}>{t('link-addpet')}</MenuItem>
-								<MenuItem onClick={() => navigate('/dashboard')}>{t('link-dashboard')}</MenuItem>
+								<MenuItem onClick={() => navigate('/addpet')}><ListItemIcon><AddCircleOutlineRoundedIcon fontSize='small' /></ListItemIcon>{t('link-addpet')}</MenuItem>
+								<MenuItem onClick={() => navigate('/dashboard')}><ListItemIcon><DashboardRoundedIcon fontSize='small' /></ListItemIcon>{t('link-dashboard')}</MenuItem>
 							</Menu>
 						</>
 					)}
@@ -63,7 +68,7 @@ export default function Navbar({ user }: { user: User | null }) {
 						<MenuRoundedIcon />
 					</IconButton>
 					<Menu anchorEl={navAnchor} open={Boolean(navAnchor)} onClose={() => setNavAnchor(null)} PaperProps={{ sx: { minWidth: 210, mt: 1 } }}>
-						{pages.map((page) => <MenuItem key={page.href} selected={pathname === page.href} onClick={() => navigate(page.href)}>{page.label}</MenuItem>)}
+						{pages.map((page) => <MenuItem key={page.href} selected={pathname === page.href} onClick={() => navigate(page.href)}><ListItemIcon>{page.icon}</ListItemIcon>{page.label}</MenuItem>)}
 					</Menu>
 				</Toolbar>
 			</Container>

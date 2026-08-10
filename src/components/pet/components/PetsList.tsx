@@ -21,7 +21,7 @@ export default function PetsList({ petsData, hide = false, status = false, user,
 	return (
 		<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2,minmax(0,1fr))', lg: 'repeat(3,minmax(0,1fr))' }, gap: { xs: 2, md: 3 } }}>
 			{petsData.map((pet) => (
-				<Card key={pet.id} elevation={0} sx={{ overflow: 'hidden', borderRadius: 3, bgcolor: 'background.paper', transition: 'transform .25s ease, box-shadow .25s ease', '&:hover': { transform: 'translateY(-5px)', boxShadow: '0 18px 42px rgba(24,32,31,.12)' } }}>
+				<Card key={pet.id} elevation={0} sx={{ overflow: 'hidden', borderRadius: 2, bgcolor: 'background.paper', transition: 'transform .25s ease, box-shadow .25s ease', '&:hover': { transform: 'translateY(-5px)', boxShadow: '0 18px 42px rgba(24,32,31,.12)' } }}>
 					<PetDetails open={selectedPetId === pet.id} handleClose={() => setSelectedPetId(null)} petId={pet.id} user={user} />
 					<Box sx={{ position: 'relative', aspectRatio: '4 / 3', bgcolor: 'primary.light', overflow: 'hidden' }}>
 						<Box component='img' src={pet.picture || '/favicon.ico'} alt={pet.name} sx={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .35s ease', '.MuiCard-root:hover &': { transform: 'scale(1.04)' } }} />

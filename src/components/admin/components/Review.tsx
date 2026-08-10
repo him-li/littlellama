@@ -34,7 +34,7 @@ export default function Review({ formData }: any) {
 					image={formData.picture instanceof File ? URL.createObjectURL(formData.picture) : formData.picture}
 						alt={formData.name}
 						style={{
-							borderRadius: '5px',
+							borderRadius: 2,
 							minWidth: '300px',
 							boxShadow: '0 0 10px 0 rgba(0,0,0,0.5)',
 						}}
@@ -126,7 +126,7 @@ export default function Review({ formData }: any) {
 const style = {
 	bgcolor: 'transparent',
 	color: 'black',
-	borderRadius: '5px',
+	borderRadius: 2,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',

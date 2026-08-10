@@ -18,6 +18,7 @@ import {
 import { useSpring, animated } from '@react-spring/web';
 import { getApiErrorMessage, POST } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
+import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 
 const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	const {
@@ -143,6 +144,7 @@ export default function Login({ open, handleClose }: any) {
 								type='submit'
 								fullWidth
 								variant='contained'
+								startIcon={<LoginRoundedIcon />}
 								color='secondary'
 								sx={{ mt: 3, mb: 2 }}
 								disabled={
@@ -203,7 +205,7 @@ const style = {
 	width: 400,
 	bgcolor: 'background.paper',
 	color: 'black',
-	borderRadius: '5px',
+	borderRadius: 2,
 	boxShadow: 24,
 	p: 4,
 	marginTop: 8,

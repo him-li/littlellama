@@ -39,7 +39,7 @@ export default function AddImage({ formData, setFormData }: any) {
 					<Box component='img'
 						style={{
 							width: '300px',
-							borderRadius: '5px',
+								borderRadius: 2,
 							boxShadow: '0 0 10px 0 rgba(0,0,0,0.5)',
 						}}
 						src={image}

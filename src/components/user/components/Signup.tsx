@@ -18,6 +18,7 @@ import {
 import { useSpring, animated } from '@react-spring/web';
 import { getApiErrorMessage, POST } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 
 const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	const {
@@ -224,6 +225,7 @@ export default function Signup({ open, handleClose }: any) {
 								type='submit'
 								fullWidth
 								variant='contained'
+								startIcon={<PersonAddAltRoundedIcon />}
 								color='secondary'
 								sx={{ mt: 3, mb: 2 }}
 								disabled={
@@ -286,7 +288,7 @@ const style = {
 	width: 400,
 	bgcolor: 'background.paper',
 	color: 'black',
-	borderRadius: '5px',
+	borderRadius: 2,
 	boxShadow: 24,
 	p: 4,
 };

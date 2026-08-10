@@ -4,6 +4,9 @@ import { Alert, Box, Button, Chip, Container, Snackbar, Stack, Typography } from
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import PetsList from '../pet/components/PetsList';
@@ -48,7 +51,7 @@ export default function Home({ user }: { user: User | null }) {
 							</Typography>
 							<Typography sx={{ maxWidth: 610, color: 'rgba(255,255,255,.8)', fontSize: { xs: '1rem', md: '1.12rem' } }}>{t('para-home')}</Typography>
 							<Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ pt: 1, width: { xs: '100%', sm: 'auto' } }}>
-								{user ? <><Button variant='contained' color='secondary' onClick={() => setOpenProfile(true)}>{t('profile-settings')}</Button><Button variant='outlined' onClick={handleLogout} sx={{ color: 'white', borderColor: 'rgba(255,255,255,.5)' }}>{t('button-logout')}</Button></> : <><Button variant='contained' color='secondary' onClick={() => setOpenSignup(true)} endIcon={<ArrowForwardRoundedIcon />}>{t('button-signup')}</Button><Button variant='outlined' onClick={() => setOpenLogin(true)} sx={{ color: 'white', borderColor: 'rgba(255,255,255,.5)' }}>{t('button-login')}</Button></>}
+								{user ? <><Button variant='contained' color='secondary' startIcon={<ManageAccountsRoundedIcon />} onClick={() => setOpenProfile(true)}>{t('profile-settings')}</Button><Button variant='outlined' startIcon={<LogoutRoundedIcon />} onClick={handleLogout} sx={{ color: 'white', borderColor: 'rgba(255,255,255,.5)' }}>{t('button-logout')}</Button></> : <><Button variant='contained' color='secondary' onClick={() => setOpenSignup(true)} endIcon={<ArrowForwardRoundedIcon />}>{t('button-signup')}</Button><Button variant='outlined' startIcon={<LoginRoundedIcon />} onClick={() => setOpenLogin(true)} sx={{ color: 'white', borderColor: 'rgba(255,255,255,.5)' }}>{t('button-login')}</Button></>}
 							</Stack>
 						</Stack>
 						<Box sx={{ position: 'relative', '&::before': { content: '""', position: 'absolute', inset: { xs: -12, md: -18 }, border: '1px solid rgba(255,255,255,.22)', borderRadius: '32px', transform: 'rotate(3deg)' } }}>

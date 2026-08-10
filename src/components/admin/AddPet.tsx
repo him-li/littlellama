@@ -173,7 +173,7 @@ const style = {
 	width: 400,
 	bgcolor: 'background.paper',
 	color: 'black',
-	borderRadius: '5px',
+	borderRadius: 2,
 	boxShadow: 24,
 	p: 4,
 };

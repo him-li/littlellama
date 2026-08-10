@@ -88,6 +88,7 @@
     "action-adopt":"領養",
     "action-foster":"寄養",
     "action-save":"收藏",
+    "action-unsave":"取消收藏",
     "action-edit":"編輯",
     "action-close":"關閉",
     "users":"使用者",

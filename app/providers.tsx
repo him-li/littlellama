@@ -10,11 +10,11 @@ const theme = createTheme({
 	cssVariables: true,
 	shape: { borderRadius: 16 },
 	typography: {
-		fontFamily: 'var(--font-karla), Arial, sans-serif',
-		h1: { fontFamily: 'var(--font-markazi), Georgia, serif', fontWeight: 700, lineHeight: 0.95 },
-		h2: { fontFamily: 'var(--font-markazi), Georgia, serif', fontWeight: 700, lineHeight: 1 },
-		h3: { fontFamily: 'var(--font-markazi), Georgia, serif', fontWeight: 650, lineHeight: 1.08 },
-		h4: { fontFamily: 'var(--font-markazi), Georgia, serif', fontWeight: 650 },
+		fontFamily: 'var(--font-karla), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Arial, sans-serif',
+		h1: { fontFamily: 'var(--font-markazi), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Georgia, serif', fontWeight: 700, lineHeight: 0.95 },
+		h2: { fontFamily: 'var(--font-markazi), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Georgia, serif', fontWeight: 700, lineHeight: 1 },
+		h3: { fontFamily: 'var(--font-markazi), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Georgia, serif', fontWeight: 650, lineHeight: 1.08 },
+		h4: { fontFamily: 'var(--font-markazi), var(--font-cjk-sc), var(--font-cjk-tc), var(--font-hebrew), var(--font-arabic), Georgia, serif', fontWeight: 650 },
 		button: { fontWeight: 700, textTransform: 'none', letterSpacing: 0 },
 	},
 	palette: {
@@ -29,7 +29,9 @@ const theme = createTheme({
 			defaultProps: { disableElevation: true },
 			styleOverrides: { root: { borderRadius: 999, paddingInline: 22, minHeight: 44 } },
 		},
-		MuiCard: { styleOverrides: { root: { border: '1px solid rgba(24,32,31,.08)' } } },
+		MuiCard: { styleOverrides: { root: { border: '1px solid rgba(24,32,31,.08)', borderRadius: 16 } } },
+		MuiPaper: { styleOverrides: { rounded: { borderRadius: 16 } } },
+		MuiModal: { styleOverrides: { root: { '& > .MuiBox-root': { borderRadius: 16 } } } },
 		MuiTextField: { defaultProps: { variant: 'outlined' } },
 		MuiOutlinedInput: {
 			styleOverrides: {

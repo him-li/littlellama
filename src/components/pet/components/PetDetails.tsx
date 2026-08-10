@@ -1,23 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
-	Backdrop,
-	Modal,
-	Typography,
-	Card,
-	CardContent,
-	CardMedia,
-	CardActions,
-	CardActionArea,
-	List,
-	ListItem,
-	ListItemText,
-	ListItemIcon,
-	Stack,
-		Button,
-		ButtonGroup,
-		Box,
+	Box, Button, Chip, CircularProgress, Divider, Drawer, IconButton,
+	Stack, Typography,
 } from '@/src/ui/mui';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
@@ -32,8 +18,7 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import { useSpring, animated } from '@react-spring/web';
-import { GET, POST, DELETE } from '../../../utils/api';
+import { DELETE, GET, POST } from '../../../utils/api';
 import type { ModalProps, Pet, User } from '../../../types/models';
 
 interface PetDetailsProps extends ModalProps {
@@ -41,307 +26,131 @@ interface PetDetailsProps extends ModalProps {
 	user: User | null;
 }
 
-const Fade = React.forwardRef(function Fade(props: any, ref: any) {
-	const {
-		children,
-		in: open,
-		onClick,
-		onEnter,
-		onExited,
-		ownerState,
-		...other
-	} = props;
-	const style = useSpring({
-		from: { opacity: 0 },
-		to: { opacity: open ? 1 : 0 },
-		onStart: () => {
-			if (open && onEnter) {
-				onEnter(null, true);
-			}
-		},
-		onRest: () => {
-			if (!open && onExited) {
-				onExited(null, true);
-			}
-		},
-	});
+interface DetailItemProps {
+	icon: ReactNode;
+	label: string;
+	value: ReactNode;
+}
+
+function DetailItem({ icon, label, value }: DetailItemProps) {
 	return (
-		<animated.div ref={ref} style={style} {...other}>
-			{React.cloneElement(children, { onClick })}
-		</animated.div>
+		<Stack direction='row' spacing={1.5} sx={{ alignItems: 'center', minWidth: 0 }}>
+			<Box sx={{ display: 'grid', placeItems: 'center', width: 38, height: 38, flexShrink: 0, borderRadius: 2, bgcolor: 'primary.light', color: 'primary.main' }}>{icon}</Box>
+			<Box sx={{ minWidth: 0 }}>
+				<Typography variant='caption' color='text.secondary'>{label}</Typography>
+				<Typography fontWeight={700} sx={{ overflowWrap: 'anywhere' }}>{value || '—'}</Typography>
+			</Box>
+		</Stack>
 	);
-});
+}
 
 export default function PetDetails({ open, handleClose, petId, user }: PetDetailsProps) {
 	const router = useRouter();
 	const { t } = useTranslation();
-	const [pet, setPet] = useState<Partial<Pet>>({});
+	const [pet, setPet] = useState<Pet | null>(null);
 	const [saved, setSaved] = useState(false);
 
 	useEffect(() => {
 		if (!open) return;
-		const fetchPet = async () => {
-			try {
-				const res = await GET<Pet>(`/pet/${petId}`);
-				setSaved(Boolean(res.saved));
-				setPet(res);
-			} catch (error) {
-				console.error('Error fetching pet data:', error);
-			}
-		};
-		void fetchPet();
+		let active = true;
+		void GET<Pet>(`/pet/${petId}`)
+			.then((result) => {
+				if (!active) return;
+				setPet(result);
+				setSaved(Boolean(result.saved));
+			})
+			.catch((error) => console.error('Error fetching pet data:', error));
+		return () => { active = false; };
 	}, [petId, open, user?.id]);
-
-	const updatePet = (updatedPet: Pet) => {
-		setPet((current) => ({
-			...updatedPet,
-			saved: current.saved,
-			relation_id: current.relation_id,
-		}));
-	};
-
-	const handleReturn = async () => {
-		try {
-			await POST(`/pet/${pet.id}/return`);
-			const updatedPet = await GET<Pet>(`/pet/${pet.id}`);
-			updatePet(updatedPet);
-		} catch (error) {
-			console.error('Error returning pet:', error);
-		}
-	};
-
-	const handleAdopt = async () => {
-		try {
-			const updatedPet = await POST<Pet>(`/pet/${pet.id}/adopt`, {});
-			updatePet(updatedPet);
-		} catch (error) {
-			console.error('Error adopting pet:', error);
-		}
-	};
-
-	const handleFoster = async () => {
-		try {
-			const updatedPet = await POST<Pet>(`/pet/${pet.id}/foster`, {});
-			updatePet(updatedPet);
-		} catch (error) {
-			console.error('Error fostering pet:', error);
-		}
-	};
-
-	const handleSave = async () => {
-		if (saved) {
-			try {
-				await DELETE(`/pet/${pet.relation_id}/save`);
-				setSaved(false);
-				setPet((current) => ({ ...current, saved: false, relation_id: undefined }));
-			} catch (error) {
-				console.error('Error unsaving pet:', error);
-			}
-		} else {
-			try {
-				const res = await POST<{ id: string; saved: boolean }>(`/pet/${pet.id}/save`, {});
-				setSaved(true);
-				setPet((current) => ({ ...current, saved: true, relation_id: res.id }));
-			} catch (error) {
-				console.error('Error saving pet:', error);
-			}
-		}
-	};
-
-	const handleEdit = () => {
-		router.push(`/pet/${pet.id}/edit`);
-	};
 
 	const closeDetails = () => {
 		if (handleClose) handleClose();
 		else router.push('/pets');
 	};
-	const isOwner = Boolean(user && pet.taken_by_user_id === user.id);
-	const isAvailable = pet.adoption_status === 'Available' && !pet.taken_by_user_id;
-	const canAdopt = isAvailable || (isOwner && pet.adoption_status === 'Fostered');
-	const canFoster = isAvailable;
+	const replacePet = (updatedPet: Pet) => setPet((current) => current ? ({ ...updatedPet, saved: current.saved, relation_id: current.relation_id }) : updatedPet);
+
+	const handleReturn = async () => {
+		if (!pet) return;
+		await POST(`/pet/${pet.id}/return`);
+		replacePet(await GET<Pet>(`/pet/${pet.id}`));
+	};
+	const handleAdopt = async () => { if (pet) replacePet(await POST<Pet>(`/pet/${pet.id}/adopt`, {})); };
+	const handleFoster = async () => { if (pet) replacePet(await POST<Pet>(`/pet/${pet.id}/foster`, {})); };
+	const handleSave = async () => {
+		if (!pet) return;
+		if (saved && pet.relation_id) {
+			await DELETE(`/pet/${pet.relation_id}/save`);
+			setSaved(false);
+			setPet({ ...pet, saved: false, relation_id: undefined });
+		} else {
+			const result = await POST<{ id: string }>(`/pet/${pet.id}/save`, {});
+			setSaved(true);
+			setPet({ ...pet, saved: true, relation_id: result.id });
+		}
+	};
+
+	const isOwner = Boolean(user && pet?.taken_by_user_id === user.id);
+	const isAvailable = pet?.adoption_status === 'Available' && !pet.taken_by_user_id;
+	const canAdopt = isAvailable || (isOwner && pet?.adoption_status === 'Fostered');
+	const detailItems = pet ? [
+		{ icon: <HomeIcon fontSize='small' />, label: t('para-adoption-status'), value: pet.adoption_status },
+		{ icon: <StraightenIcon fontSize='small' sx={{ rotate: '90deg' }} />, label: t('para-height'), value: `${pet.height} cm` },
+		{ icon: <FitnessCenterIcon fontSize='small' />, label: t('para-weight'), value: `${pet.weight} kg` },
+		{ icon: <ColorLensIcon fontSize='small' />, label: t('para-color'), value: pet.color },
+		{ icon: <PriorityHighIcon fontSize='small' />, label: t('para-hypoallergenic'), value: pet.hypoallergenic ? t('yes') : t('no') },
+		{ icon: <NoFoodIcon fontSize='small' />, label: t('para-dietary-restrictions'), value: pet.dietary_restrictions },
+	] : [];
 
 	return (
-		<Modal
-			aria-labelledby='pet-detail'
-			aria-describedby='pet-detail'
+		<Drawer
+			anchor='bottom'
 			open={open}
 			onClose={closeDetails}
-			closeAfterTransition
-			slots={{ backdrop: Backdrop }}
+			slotProps={{
+				paper: { sx: {
+					maxHeight: '92dvh', borderRadius: '16px 16px 0 0', overflow: 'hidden',
+					bgcolor: 'background.paper',
+				} },
+			}}
 		>
-			<Fade in={open}>
-				<Card sx={style} onClick={(e) => e.stopPropagation()}>
-					<Box component='img'
-						src={pet.picture}
-						alt=''
-						aria-hidden='true'
-						style={{
-							opacity: 1,
-							position: 'absolute',
-							bottom: 0,
-							width: '100%',
-							height: '100%',
-							zIndex: 0,
-							filter: 'blur(50px)',
-						}}
-					/>
-					<CardActionArea>
-						<Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-							<Stack>
-								<CardMedia
-									component='img'
-									image={pet.picture}
-									alt={pet.name}
-									style={{
-										borderRadius: '5px',
-										minWidth: '300px',
-										boxShadow: '0 0 10px 0 rgba(0,0,0,0.5)',
-									}}
-								/>
-								<CardContent>
-									<Typography variant='h4' component='div'>
-										{pet.name}
-									</Typography>
-									<Typography variant='h5' color='text.secondary'>
-										{pet.breed + ' ' + pet.type}
-									</Typography>
-									<Typography variant='body' color='text.secondary' mt={5}>
-										{'Bio: ' + pet.bio}
-									</Typography>
-								</CardContent>
+			<Box sx={{ width: 52, height: 5, borderRadius: 99, bgcolor: 'divider', mx: 'auto', mt: 1.25, mb: .5 }} />
+			{!pet ? (
+				<Box sx={{ minHeight: 320, display: 'grid', placeItems: 'center' }}><CircularProgress /></Box>
+			) : (
+				<>
+					<Box sx={{ overflowY: 'auto' }}>
+						<Box sx={{ maxWidth: 1120, mx: 'auto', px: { xs: 2, sm: 3, md: 4 }, pt: 1, pb: 3 }}>
+							<Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+								<Box>
+									<Stack direction='row' spacing={1} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
+										<Typography id='pet-detail-title' variant='h2' sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' } }}>{pet.name}</Typography>
+										<Chip size='small' label={pet.adoption_status} color={pet.adoption_status === 'Available' ? 'primary' : 'default'} />
+									</Stack>
+									<Typography color='text.secondary'>{[pet.breed, pet.type].filter(Boolean).join(' · ')}</Typography>
+								</Box>
+								<IconButton aria-label={t('action-close')} onClick={closeDetails}><CloseIcon /></IconButton>
 							</Stack>
-							<List
-								style={{
-									margin: '1em',
-									minWidth: '50%',
-								}}
-							>
-								<ListItem sx={{ justifyContent: 'space-between' }}>
-									<ListItemIcon>
-										<HomeIcon />
-									</ListItemIcon>
-									<ListItemText primary={t('para-adoption-status')} />
-									<ListItemText
-										primary={pet.adoption_status}
-										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
-									/>
-								</ListItem>
-								<ListItem sx={{ justifyContent: 'space-between' }}>
-									<ListItemIcon>
-										<StraightenIcon style={{ rotate: '90deg' }} />
-									</ListItemIcon>
-									<ListItemText primary={t('para-height')} />
-									<ListItemText
-										primary={pet.height + ' cm'}
-										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
-									/>
-								</ListItem>
-								<ListItem sx={{ justifyContent: 'space-between' }}>
-									<ListItemIcon>
-										<FitnessCenterIcon />
-									</ListItemIcon>
-									<ListItemText primary={t('para-weight')} />
-									<ListItemText
-										primary={pet.weight + ' kg'}
-										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
-									/>
-								</ListItem>
-								<ListItem sx={{ justifyContent: 'space-between' }}>
-									<ListItemIcon>
-										<ColorLensIcon />
-									</ListItemIcon>
-									<ListItemText primary={t('para-color')} />
-									<ListItemText
-										primary={pet.color}
-										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
-									/>
-								</ListItem>
-								<ListItem sx={{ justifyContent: 'space-between' }}>
-									<ListItemIcon>
-										<PriorityHighIcon />
-									</ListItemIcon>
-									<ListItemText primary={t('para-hypoallergenic')} />
-									<ListItemText
-										primary={pet.hypoallergenic ? t('yes') : t('no')}
-										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
-									/>
-								</ListItem>
-								<ListItem sx={{ justifyContent: 'space-between' }}>
-									<ListItemIcon>
-										<NoFoodIcon />
-									</ListItemIcon>
-									<ListItemText primary={t('para-dietary-restrictions')} />
-									<ListItemText
-										primary={pet.dietary_restrictions}
-										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
-									/>
-								</ListItem>
-							</List>
-						</Stack>
-					</CardActionArea>
-					<CardActions
-							style={{
-								justifyContent: 'center',
-								width: '100%',
-								padding: '0',
-							}}
-						>
-							<ButtonGroup fullWidth size='large'>
-								{user && isOwner && pet.adoption_status !== 'Available' && (
-									<Button variant='text' color='inherit' onClick={handleReturn}>
-										<UndoIcon sx={{ mr: 1 }} />
-										{t('action-return')}
-									</Button>
-								)}
-								{user && canAdopt && (
-									<Button variant='text' color='inherit' onClick={handleAdopt}>
-										<AddHomeIcon sx={{ mr: 1 }} />
-										{t('action-adopt')}
-									</Button>
-								)}
-								{user && canFoster && (
-									<Button variant='text' color='inherit' onClick={handleFoster}>
-										<PetsIcon sx={{ mr: 1 }} />
-										{t('action-foster')}
-									</Button>
-								)}
-								{user && <Button variant='text' color='inherit' onClick={handleSave}>
-									{saved ? (
-										<StarIcon sx={{ mr: 1 }} />
-									) : (
-										<StarBorderIcon sx={{ mr: 1 }} />
-									)}
-									{t('action-save')}
-								</Button>}
-								{user?.admin && (
-									<Button variant='text' color='inherit' onClick={handleEdit}>
-										<EditIcon sx={{ mr: 1 }} />
-										{t('action-edit')}
-									</Button>
-								)}
-								<Button variant='text' color='inherit' onClick={closeDetails}>
-									<CloseIcon sx={{ mr: 1 }} />
-									{t('action-close')}
-								</Button>
-							</ButtonGroup>
-					</CardActions>
-				</Card>
-			</Fade>
-		</Modal>
+
+							<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'minmax(320px, .9fr) minmax(0, 1.1fr)' }, gap: { xs: 2.5, md: 4 }, alignItems: 'start' }}>
+								<Box component='img' src={pet.picture || '/favicon.ico'} alt={pet.name} sx={{ width: '100%', aspectRatio: { xs: '4 / 3', sm: '16 / 10' }, maxHeight: 470, objectFit: 'cover', borderRadius: 2, bgcolor: 'primary.light' }} />
+								<Stack spacing={2.5}>
+									<Box><Typography variant='overline' color='primary.main' fontWeight={800}>{t('para-bio')}</Typography><Typography sx={{ mt: .5, fontSize: '1.05rem', lineHeight: 1.7 }}>{pet.bio}</Typography></Box>
+									<Divider />
+									<Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' }, gap: 2 }}>{detailItems.map((item) => <DetailItem key={item.label} {...item} />)}</Box>
+								</Stack>
+							</Box>
+						</Box>
+					</Box>
+					<Divider />
+					<Stack direction='row' spacing={1} sx={{ maxWidth: 1120, width: '100%', mx: 'auto', p: { xs: 1.5, sm: 2 }, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+						{user && isOwner && pet.adoption_status !== 'Available' ? <Button startIcon={<UndoIcon />} onClick={() => void handleReturn()}>{t('action-return')}</Button> : null}
+						{user && canAdopt ? <Button variant='contained' startIcon={<AddHomeIcon />} onClick={() => void handleAdopt()}>{t('action-adopt')}</Button> : null}
+						{user && isAvailable ? <Button variant='outlined' startIcon={<PetsIcon />} onClick={() => void handleFoster()}>{t('action-foster')}</Button> : null}
+						{user ? <Button variant='outlined' startIcon={saved ? <StarIcon /> : <StarBorderIcon />} onClick={() => void handleSave()}>{saved ? t('action-unsave') : t('action-save')}</Button> : null}
+						{user?.admin ? <Button startIcon={<EditIcon />} onClick={() => router.push(`/pet/${pet.id}/edit`)}>{t('action-edit')}</Button> : null}
+					</Stack>
+				</>
+			)}
+		</Drawer>
 	);
 }
-
-const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	bgcolor: 'background.paper',
-	color: 'black',
-	borderRadius: '5px',
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
-	minWidth: '50%',
-};
