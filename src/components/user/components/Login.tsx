@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-	Backdrop,
 	Box,
 	Modal,
 	Button,
@@ -19,6 +18,7 @@ import {
 import { getApiErrorMessage, POST } from '../../../utils/api';
 import littleLlama from '../../../assets/littleLlama.png';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+import { centeredModalRootSx, centeredModalSurfaceSx } from '../../../utils/styles';
 
 export default function Login({ open, handleClose }: any) {
 	const { t } = useTranslation();
@@ -62,10 +62,10 @@ export default function Login({ open, handleClose }: any) {
 				open={open}
 				onClose={handleClose}
 				closeAfterTransition
-				slots={{ backdrop: Backdrop }}
+				sx={centeredModalRootSx}
 			>
 				<Grow in={open} timeout={{ enter: 280, exit: 180 }}>
-					<Box sx={style}>
+					<Box sx={centeredModalSurfaceSx}>
 						<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
 							<Box component='img' src={littleLlama.src} height={75} alt='' />
 						</Avatar>
@@ -163,22 +163,3 @@ export default function Login({ open, handleClose }: any) {
 		</React.Fragment>
 	);
 }
-
-
-
-const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: 400,
-	bgcolor: 'background.paper',
-	color: 'text.primary',
-	borderRadius: 2,
-	boxShadow: 24,
-	p: 4,
-	marginTop: 8,
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
-};

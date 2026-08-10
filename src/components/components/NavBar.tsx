@@ -125,10 +125,18 @@ export default function Navbar({ user }: { user: User | null }) {
                 component={NextLink}
                 href={page.href}
                 startIcon={page.icon}
-                color={pathname === page.href ? "primary" : "inherit"}
+                color="inherit"
                 sx={{
-                  bgcolor:
-                    pathname === page.href ? "primary.light" : "transparent",
+                  bgcolor: pathname === page.href
+                    ? "rgba(var(--mui-palette-primary-mainChannel) / .14)"
+                    : "transparent",
+                  color: "text.primary",
+                  "&:hover": pathname === page.href
+                    ? {
+                        bgcolor:
+                          "rgba(var(--mui-palette-primary-mainChannel) / .22)",
+                      }
+                    : undefined,
                 }}
               >
                 {page.label}

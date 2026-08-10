@@ -24,6 +24,7 @@ import ProfileSettings from "./components/ProfileSettings";
 import { GET } from "../../utils/api";
 import heroImage from "../../assets/your-pet-included.jpg";
 import type { Pet, User } from "../../types/models";
+import { dottedHeroContentSx, dottedHeroSx } from "../../utils/styles";
 
 export default function Home({ user }: { user: User | null }) {
   const { t } = useTranslation();
@@ -60,24 +61,11 @@ export default function Home({ user }: { user: User | null }) {
       <Box
         component="section"
         sx={{
-          position: "relative",
-          overflow: "hidden",
-          bgcolor: "primary.dark",
-          color: "white",
+          ...dottedHeroSx,
           py: { xs: 7, md: 11 },
         }}
       >
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            opacity: 0.16,
-            backgroundImage:
-              "radial-gradient(circle at 15% 20%, #fff 0 2px, transparent 3px)",
-            backgroundSize: "34px 34px",
-          }}
-        />
-        <Container maxWidth="lg" sx={{ position: "relative" }}>
+        <Container maxWidth="lg" sx={dottedHeroContentSx}>
           <Box
             sx={{
               display: "grid",
@@ -99,18 +87,12 @@ export default function Home({ user }: { user: User | null }) {
                   "& .MuiChip-icon": { color: "secondary.main" },
                 }}
               />
-              <Typography
-                variant="h1"
-                sx={{ maxWidth: 680 }}
-              >
+              <Typography variant="h1" sx={{ maxWidth: 680 }}>
                 {user
                   ? `${t("heading-hey")} ${user.firstname ?? user.firstName}!`
                   : t("heading-little-llama")}
               </Typography>
-              <Typography
-                variant="h4"
-                sx={{ color: "secondary.light" }}
-              >
+              <Typography variant="h4" sx={{ color: "secondary.light" }}>
                 {user ? t("heading-welcome") : t("heading-pet-adoption")}
               </Typography>
               <Typography
@@ -222,9 +204,7 @@ export default function Home({ user }: { user: User | null }) {
               >
                 {t("heading-meet-friend")}
               </Typography>
-              <Typography variant="h2">
-                {t("heading-petlist-home")}
-              </Typography>
+              <Typography variant="h2">{t("heading-petlist-home")}</Typography>
             </Box>
             <Button
               component={NextLink}

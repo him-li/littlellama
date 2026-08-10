@@ -6,6 +6,7 @@ import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import PetsList from './components/PetsList';
 import { GET } from '../../utils/api';
 import type { Pet, User } from '../../types/models';
+import { dottedHeroContentSx, dottedHeroSx } from '../../utils/styles';
 
 type SearchParams = { type: string; adoption_status: string; height: string; weight: string; name: string };
 const initialParams: SearchParams = { type: '', adoption_status: '', height: '', weight: '', name: '' };
@@ -27,7 +28,7 @@ export default function Search({ user }: { user: User | null }) {
 	};
 	return (
 		<>
-			<Box sx={{ bgcolor: 'primary.dark', color: 'white', py: { xs: 6, md: 9 } }}><Container maxWidth='md'><Stack spacing={1.5} sx={{ alignItems: 'center', textAlign: 'center' }}><Typography color='secondary.light' fontWeight={800}>{t('heading-search-kicker')}</Typography><Typography variant='h1'>{t('heading-find-pet')}</Typography><Typography sx={{ color: 'rgba(255,255,255,.75)', maxWidth: 590 }}>{t('para-search')}</Typography></Stack></Container></Box>
+			<Box sx={{ ...dottedHeroSx, py: { xs: 6, md: 9 } }}><Container maxWidth='md' sx={dottedHeroContentSx}><Stack spacing={1.5} sx={{ alignItems: 'center', textAlign: 'center' }}><Typography color='secondary.light' fontWeight={800}>{t('heading-search-kicker')}</Typography><Typography variant='h1'>{t('heading-find-pet')}</Typography><Typography sx={{ color: 'rgba(255,255,255,.75)', maxWidth: 590 }}>{t('para-search')}</Typography></Stack></Container></Box>
 		<Container maxWidth='md' sx={{ mt: { xs: -3, md: -4 }, position: 'relative', pb: 8 }}>
 			<Paper elevation={0} sx={{ p: { xs: 2, md: 3 }, border: '1px solid', borderColor: 'divider', boxShadow: '0 20px 50px rgba(24,32,31,.1)' }}>
 				<Stack spacing={2}>
