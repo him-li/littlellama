@@ -15,8 +15,9 @@ import {
 	ListItemText,
 	ListItemIcon,
 	Stack,
-	Button,
-	ButtonGroup,
+		Button,
+		ButtonGroup,
+		Box,
 } from '@/src/ui/mui';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
@@ -168,15 +169,10 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 			onClose={closeDetails}
 			closeAfterTransition
 			slots={{ backdrop: Backdrop }}
-			slotProps={{
-				backdrop: {
-					TransitionComponent: Fade,
-				},
-			}}
 		>
 			<Fade in={open}>
 				<Card sx={style} onClick={(e) => e.stopPropagation()}>
-					<img
+					<Box component='img'
 						src={pet.picture}
 						alt=''
 						aria-hidden='true'
@@ -191,7 +187,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 						}}
 					/>
 					<CardActionArea>
-						<Stack direction='row' justifyContent='space-between'>
+						<Stack direction='row' sx={{ justifyContent: 'space-between' }}>
 							<Stack>
 								<CardMedia
 									component='img'
@@ -228,7 +224,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 									<ListItemText primary={t('para-adoption-status')} />
 									<ListItemText
 										primary={pet.adoption_status}
-										primaryTypographyProps={{ textAlign: 'right' }}
+										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 									/>
 								</ListItem>
 								<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -238,7 +234,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 									<ListItemText primary={t('para-height')} />
 									<ListItemText
 										primary={pet.height + ' cm'}
-										primaryTypographyProps={{ textAlign: 'right' }}
+										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 									/>
 								</ListItem>
 								<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -248,7 +244,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 									<ListItemText primary={t('para-weight')} />
 									<ListItemText
 										primary={pet.weight + ' kg'}
-										primaryTypographyProps={{ textAlign: 'right' }}
+										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 									/>
 								</ListItem>
 								<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -258,7 +254,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 									<ListItemText primary={t('para-color')} />
 									<ListItemText
 										primary={pet.color}
-										primaryTypographyProps={{ textAlign: 'right' }}
+										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 									/>
 								</ListItem>
 								<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -268,7 +264,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 									<ListItemText primary={t('para-hypoallergenic')} />
 									<ListItemText
 										primary={pet.hypoallergenic ? t('yes') : t('no')}
-										primaryTypographyProps={{ textAlign: 'right' }}
+										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 									/>
 								</ListItem>
 								<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -278,7 +274,7 @@ export default function PetDetails({ open, handleClose, petId, user }: PetDetail
 									<ListItemText primary={t('para-dietary-restrictions')} />
 									<ListItemText
 										primary={pet.dietary_restrictions}
-										primaryTypographyProps={{ textAlign: 'right' }}
+										slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 									/>
 								</ListItem>
 							</List>

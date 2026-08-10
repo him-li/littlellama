@@ -77,7 +77,7 @@ export default function EditPet({ user, petId }: any) {
 		<Box height='100vh' bgcolor='teal'>
 			<Card sx={style}>
 				{typeof formData.picture === 'string' && formData.picture && (
-					<img
+					<Box component='img'
 						src={formData.picture}
 						alt=''
 						style={{
@@ -92,7 +92,7 @@ export default function EditPet({ user, petId }: any) {
 					/>
 				)}
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main', zIndex: 1 }}>
-					<img src={littleLlama.src} height={75} alt='' />
+					<Box component='img' src={littleLlama.src} height={75} alt='' />
 				</Avatar>
 				<Typography
 					variant='h2'

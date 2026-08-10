@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@emotion/react": "latest",
@@ -24,11 +27,18 @@
     "react-i18next": "latest"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/jest": "^30.0.0",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "jsdom": "^30.0.1",
+    "prettier": "^3.9.6",
     "typescript": "^6.0.3"
   }
 }

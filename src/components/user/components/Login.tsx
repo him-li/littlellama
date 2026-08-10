@@ -26,7 +26,6 @@ const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 		onClick,
 		onEnter,
 		onExited,
-		// eslint-disable-next-line no-unused-vars
 		ownerState,
 		...other
 	} = props;
@@ -94,16 +93,11 @@ export default function Login({ open, handleClose }: any) {
 				onClose={handleClose}
 				closeAfterTransition
 				slots={{ backdrop: Backdrop }}
-				slotProps={{
-					backdrop: {
-						TransitionComponent: Fade,
-					},
-				}}
 			>
 				<Fade in={open}>
 					<Box sx={style}>
 						<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-							<img src={littleLlama.src} height={75} alt='' />
+							<Box component='img' src={littleLlama.src} height={75} alt='' />
 						</Avatar>
 						<Typography component='h1' variant='h5'>
 							{t('button-login')}

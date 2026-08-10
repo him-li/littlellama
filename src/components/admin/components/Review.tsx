@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import {
 	Typography,
 	List,
@@ -32,7 +31,7 @@ export default function Review({ formData }: any) {
 				<Stack>
 					<CardMedia
 						component='img'
-						image={URL.createObjectURL(new Blob([formData.picture]))}
+					image={formData.picture instanceof File ? URL.createObjectURL(formData.picture) : formData.picture}
 						alt={formData.name}
 						style={{
 							borderRadius: '5px',
@@ -65,7 +64,7 @@ export default function Review({ formData }: any) {
 						<ListItemText primary={t('para-adoption-status')} />
 						<ListItemText
 							primary={formData.adoption_status}
-							primaryTypographyProps={{ textAlign: 'right' }}
+							slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 						/>
 					</ListItem>
 					<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -75,7 +74,7 @@ export default function Review({ formData }: any) {
 						<ListItemText primary={t('para-height')} />
 						<ListItemText
 							primary={formData.height + ' cm'}
-							primaryTypographyProps={{ textAlign: 'right' }}
+							slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 						/>
 					</ListItem>
 					<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -85,7 +84,7 @@ export default function Review({ formData }: any) {
 						<ListItemText primary={t('para-weight')} />
 						<ListItemText
 							primary={formData.weight + ' kg'}
-							primaryTypographyProps={{ textAlign: 'right' }}
+							slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 						/>
 					</ListItem>
 					<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -95,7 +94,7 @@ export default function Review({ formData }: any) {
 						<ListItemText primary={t('para-color')} />
 						<ListItemText
 							primary={formData.color}
-							primaryTypographyProps={{ textAlign: 'right' }}
+							slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 						/>
 					</ListItem>
 					<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -105,7 +104,7 @@ export default function Review({ formData }: any) {
 						<ListItemText primary={t('para-hypoallergenic')} />
 						<ListItemText
 							primary={formData.hypoallergenic ? t('yes') : t('no')}
-							primaryTypographyProps={{ textAlign: 'right' }}
+							slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 						/>
 					</ListItem>
 					<ListItem sx={{ justifyContent: 'space-between' }}>
@@ -115,7 +114,7 @@ export default function Review({ formData }: any) {
 						<ListItemText primary={t('para-dietary-restrictions')} />
 						<ListItemText
 							primary={formData.dietary_restrictions}
-							primaryTypographyProps={{ textAlign: 'right' }}
+							slotProps={{ primary: { sx: { textAlign: 'right' } } }}
 						/>
 					</ListItem>
 				</List>

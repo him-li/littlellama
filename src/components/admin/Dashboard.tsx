@@ -109,7 +109,7 @@ export default function Dashboard({ user }: any) {
 							</Typography>
 						</Grid>
 						<Grid item flexGrow={1} xs='auto' md={4} position='relative'>
-							<img
+							<Box component='img'
 								src={walkingLlama.src}
 								alt=''
 								width='100%'

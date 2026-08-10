@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Grid, Button } from '@/src/ui/mui';
+import { Box, Grid, Button } from '@/src/ui/mui';
 
 export default function AddImage({ formData, setFormData }: any) {
 	const [image, setImage] = useState<string | File | null>(null);
@@ -18,7 +18,6 @@ export default function AddImage({ formData, setFormData }: any) {
 			setImage(typeof reader.result === 'string' ? reader.result : null);
 		};
 		reader.readAsDataURL(file);
-		setImage(file);
 		setFormData({ ...formData, picture: file });
 	};
 
@@ -37,7 +36,7 @@ export default function AddImage({ formData, setFormData }: any) {
 		<Grid container spacing={3}>
 			{image && (
 				<Grid item xs={12}>
-					<img
+					<Box component='img'
 						style={{
 							width: '300px',
 							borderRadius: '5px',

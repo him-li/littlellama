@@ -67,7 +67,7 @@ export default function AddPet({ user }: any) {
 		<Box height='100vh' bgcolor='teal'>
 			<Card sx={style}>
 				<Avatar sx={{ m: 1, bgcolor: 'secondary.main', zIndex: 1 }}>
-					<img src={littleLlama.src} height={75} alt='' />
+					<Box component='img' src={littleLlama.src} height={75} alt='' />
 				</Avatar>
 				<Typography
 					variant='h2'
