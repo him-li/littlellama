@@ -104,5 +104,7 @@
   "action-next": "اللي بعده",
   "pets-owned": "حيوانات متبنّية",
   "pets-saved": "حيوانات محفوظة",
-  "para-password-too-short": "كلمة السر لازم تكون ٨ خانات عالأقل"
+  "para-password-too-short": "كلمة السر لازم تكون ٨ خانات عالأقل",
+  "theme-switch-to-dark": "شغّل الوضع الداكن",
+  "theme-switch-to-light": "شغّل الوضع الفاتح"
 }

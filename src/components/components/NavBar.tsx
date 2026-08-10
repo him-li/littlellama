@@ -2,6 +2,7 @@ import { useState, type MouseEvent } from "react";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { useColorScheme } from "@mui/material/styles";
 import {
   AppBar,
   Avatar,
@@ -24,6 +25,8 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import littleLlama from "../../assets/littleLlama.png";
 import type { User } from "../../types/models";
 
@@ -31,6 +34,8 @@ export default function Navbar({ user }: { user: User | null }) {
   const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
+  const { mode, systemMode, setMode } = useColorScheme();
+  const darkMode = (mode === "system" ? systemMode : mode) === "dark";
   const [navAnchor, setNavAnchor] = useState<HTMLElement | null>(null);
   const [adminAnchor, setAdminAnchor] = useState<HTMLElement | null>(null);
   const pages = [
@@ -61,7 +66,7 @@ export default function Navbar({ user }: { user: User | null }) {
       position="sticky"
       elevation={0}
       sx={{
-        bgcolor: "rgba(251,250,246,.92)",
+        bgcolor: "rgba(var(--mui-palette-background-paperChannel) / .92)",
         color: "text.primary",
         borderBottom: "1px solid",
         borderColor: "divider",
@@ -206,6 +211,19 @@ export default function Navbar({ user }: { user: User | null }) {
               </MenuItem>
             ))}
           </Menu>
+          <Tooltip
+            title={t(darkMode ? "theme-switch-to-light" : "theme-switch-to-dark")}
+          >
+            <IconButton
+              aria-label={t(
+                darkMode ? "theme-switch-to-light" : "theme-switch-to-dark",
+              )}
+              onClick={() => setMode(darkMode ? "light" : "dark")}
+              sx={{ flexShrink: 0 }}
+            >
+              {darkMode ? <LightModeRoundedIcon /> : <DarkModeRoundedIcon />}
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </Container>
     </AppBar>

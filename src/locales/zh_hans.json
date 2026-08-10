@@ -104,5 +104,7 @@
     "action-next":"下一步",
     "pets-owned":"已领养宠物",
     "pets-saved":"已收藏宠物",
-    "para-password-too-short":"密码至少需要 8 个字符"
+    "para-password-too-short":"密码至少需要 8 个字符",
+    "theme-switch-to-dark":"切换到深色模式",
+    "theme-switch-to-light":"切换到浅色模式"
 }

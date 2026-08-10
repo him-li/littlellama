@@ -104,5 +104,7 @@
     "action-next":"Next",
     "pets-owned":"Pets owned",
     "pets-saved":"Pets saved",
-    "para-password-too-short":"Password must be at least 8 characters"
+    "para-password-too-short":"Password must be at least 8 characters",
+    "theme-switch-to-dark":"Switch to dark mode",
+    "theme-switch-to-light":"Switch to light mode"
 }

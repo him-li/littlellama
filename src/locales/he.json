@@ -104,5 +104,7 @@
   "action-next": "הבא",
   "pets-owned": "חיות מחמד שאומצו",
   "pets-saved": "חיות מחמד שנשמרו",
-  "para-password-too-short": "הסיסמה חייבת להכיל לפחות 8 תווים"
+  "para-password-too-short": "הסיסמה חייבת להכיל לפחות 8 תווים",
+  "theme-switch-to-dark": "מעבר למצב כהה",
+  "theme-switch-to-light": "מעבר למצב בהיר"
 }

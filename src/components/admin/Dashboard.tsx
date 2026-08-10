@@ -50,7 +50,7 @@ function a11yProps(index) {
 	};
 }
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+	backgroundColor: theme.palette.background.paper,
 	color: theme.palette.text.secondary,
 }));
 

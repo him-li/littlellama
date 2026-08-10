@@ -125,7 +125,7 @@ export default function Review({ formData }: any) {
 
 const style = {
 	bgcolor: 'transparent',
-	color: 'black',
+	color: 'text.primary',
 	borderRadius: 2,
 	display: 'flex',
 	flexDirection: 'column',

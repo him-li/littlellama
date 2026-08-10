@@ -42,7 +42,7 @@ const style = {
 	minWidth: '75%',
 	width: 400,
 	bgcolor: 'background.paper',
-	color: 'black',
+	color: 'text.primary',
 	borderRadius: '5px',
 	boxShadow: 24,
 	p: 4,

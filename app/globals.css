@@ -1,5 +1,4 @@
 :root {
-	color-scheme: light;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	--font-script-primary: var(--font-cjk-sc);
@@ -28,9 +27,9 @@ html[lang='ar'] {
 }
 * { box-sizing: border-box; }
 html { min-height: 100%; scroll-behavior: smooth; }
-body { margin: 0; min-height: 100%; background: #fbfaf6; color: #18201f; }
+body { margin: 0; min-height: 100%; background: var(--mui-palette-background-default, #fbfaf6); color: var(--mui-palette-text-primary, #18201f); }
 html[dir='rtl'] .MuiButton-startIcon { margin-left: 8px; margin-right: -4px; }
 html[dir='rtl'] .MuiButton-endIcon { margin-left: -4px; margin-right: 8px; }
 img { display: block; max-width: 100%; }
 a { color: inherit; }
-::selection { background: #f6bd3b; color: #18201f; }
+::selection { background: var(--mui-palette-secondary-main, #f6bd3b); color: var(--mui-palette-secondary-contrastText, #18201f); }

@@ -116,7 +116,7 @@ export default function EditPet({ user, petId }: any) {
 					sx={{
 						my: { xs: 3, md: 6 },
 						p: { xs: 2, md: 3 },
-						color: 'black',
+						color: 'text.primary',
 						backgroundColor: 'transparent',
 						zIndex: 1,
 						border: '0',
@@ -198,7 +198,7 @@ const style = {
 	minWidth: '75%',
 	width: 400,
 	bgcolor: 'background.paper',
-	color: 'black',
+	color: 'text.primary',
 	borderRadius: 2,
 	boxShadow: 24,
 	p: 4,
