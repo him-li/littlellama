@@ -33,7 +33,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSpring, animated } from '@react-spring/web';
 import { GET, POST, DELETE } from '../../../utils/api';
-import type { Pet } from '../../../types/models';
+import type { ModalProps, Pet, User } from '../../../types/models';
+
+interface PetDetailsProps extends ModalProps {
+	petId: string;
+	user: User | null;
+}
 
 const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	const {
@@ -42,7 +47,6 @@ const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 		onClick,
 		onEnter,
 		onExited,
-		// eslint-disable-next-line no-unused-vars
 		ownerState,
 		...other
 	} = props;
@@ -67,35 +71,39 @@ const Fade = React.forwardRef(function Fade(props: any, ref: any) {
 	);
 });
 
-export default function PetDetails({ open, handleClose, petId, user }: any) {
+export default function PetDetails({ open, handleClose, petId, user }: PetDetailsProps) {
 	const router = useRouter();
 	const { t } = useTranslation();
 	const [pet, setPet] = useState<Partial<Pet>>({});
 	const [saved, setSaved] = useState(false);
 
 	useEffect(() => {
-		if (open) {
-			const fetchPet = async () => {
-				try {
-					const userId = user.id;
-					const res = await GET(`/pet/${petId}`, { userId });
-					console.log('This is the user id', userId, 'Pet fetched', res);
-					setSaved(res.saved);
-					setPet(res);
-				} catch (error) {
-					console.error('Error fetching pets data:', error);
-				}
-			};
-			fetchPet();
-		}
-	}, [petId, open, saved, user]);
+		if (!open) return;
+		const fetchPet = async () => {
+			try {
+				const res = await GET<Pet>(`/pet/${petId}`);
+				setSaved(Boolean(res.saved));
+				setPet(res);
+			} catch (error) {
+				console.error('Error fetching pet data:', error);
+			}
+		};
+		void fetchPet();
+	}, [petId, open, user?.id]);
+
+	const updatePet = (updatedPet: Pet) => {
+		setPet((current) => ({
+			...updatedPet,
+			saved: current.saved,
+			relation_id: current.relation_id,
+		}));
+	};
 
 	const handleReturn = async () => {
 		try {
 			await POST(`/pet/${pet.id}/return`);
-			const updatedPet = await GET(`/pet/${pet.id}`, { user_id: user.id });
-			console.log('Returned? Should be available', updatedPet.adoption_status);
-			setPet(updatedPet);
+			const updatedPet = await GET<Pet>(`/pet/${pet.id}`);
+			updatePet(updatedPet);
 		} catch (error) {
 			console.error('Error returning pet:', error);
 		}
@@ -103,21 +111,19 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 
 	const handleAdopt = async () => {
 		try {
-			await POST(`/pet/${pet.id}/adopt`, { user_id: user.id });
-			const updatedPet = await GET(`/pet/${pet.id}`);
-			setPet(updatedPet);
+			const updatedPet = await POST<Pet>(`/pet/${pet.id}/adopt`, {});
+			updatePet(updatedPet);
 		} catch (error) {
-			console.error('Error returning pet:', error);
+			console.error('Error adopting pet:', error);
 		}
 	};
 
 	const handleFoster = async () => {
 		try {
-			await POST(`/pet/${pet.id}/foster`, { user_id: user.id });
-			const updatedPet = await GET(`/pet/${pet.id}`);
-			setPet(updatedPet);
+			const updatedPet = await POST<Pet>(`/pet/${pet.id}/foster`, {});
+			updatePet(updatedPet);
 		} catch (error) {
-			console.error('Error returning pet:', error);
+			console.error('Error fostering pet:', error);
 		}
 	};
 
@@ -126,30 +132,40 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 			try {
 				await DELETE(`/pet/${pet.relation_id}/save`);
 				setSaved(false);
+				setPet((current) => ({ ...current, saved: false, relation_id: undefined }));
 			} catch (error) {
 				console.error('Error unsaving pet:', error);
 			}
 		} else {
 			try {
-				const res = await POST(`/pet/${pet.id}/save`, { user_id: user.id });
-				console.log(res.saved);
+				const res = await POST<{ id: string; saved: boolean }>(`/pet/${pet.id}/save`, {});
 				setSaved(true);
+				setPet((current) => ({ ...current, saved: true, relation_id: res.id }));
 			} catch (error) {
 				console.error('Error saving pet:', error);
 			}
 		}
 	};
 
-	const handleEdit = async () => {
+	const handleEdit = () => {
 		router.push(`/pet/${pet.id}/edit`);
 	};
+
+	const closeDetails = () => {
+		if (handleClose) handleClose();
+		else router.push('/pets');
+	};
+	const isOwner = Boolean(user && pet.taken_by_user_id === user.id);
+	const isAvailable = pet.adoption_status === 'Available' && !pet.taken_by_user_id;
+	const canAdopt = isAvailable || (isOwner && pet.adoption_status === 'Fostered');
+	const canFoster = isAvailable;
 
 	return (
 		<Modal
 			aria-labelledby='pet-detail'
 			aria-describedby='pet-detail'
 			open={open}
-			onClose={handleClose}
+			onClose={closeDetails}
 			closeAfterTransition
 			slots={{ backdrop: Backdrop }}
 			slotProps={{
@@ -162,6 +178,8 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 				<Card sx={style} onClick={(e) => e.stopPropagation()}>
 					<img
 						src={pet.picture}
+						alt=''
+						aria-hidden='true'
 						style={{
 							opacity: 1,
 							position: 'absolute',
@@ -266,8 +284,7 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 							</List>
 						</Stack>
 					</CardActionArea>
-					{user && (
-						<CardActions
+					<CardActions
 							style={{
 								justifyContent: 'center',
 								width: '100%',
@@ -275,45 +292,44 @@ export default function PetDetails({ open, handleClose, petId, user }: any) {
 							}}
 						>
 							<ButtonGroup fullWidth size='large'>
-								{pet.adoption_status !== 'Available' && (
+								{user && isOwner && pet.adoption_status !== 'Available' && (
 									<Button variant='text' color='inherit' onClick={handleReturn}>
 										<UndoIcon sx={{ mr: 1 }} />
 										{t('action-return')}
 									</Button>
 								)}
-								{pet.adoption_status !== 'Adopted' && (
+								{user && canAdopt && (
 									<Button variant='text' color='inherit' onClick={handleAdopt}>
 										<AddHomeIcon sx={{ mr: 1 }} />
 										{t('action-adopt')}
 									</Button>
 								)}
-								{pet.adoption_status !== 'Fostered' && (
+								{user && canFoster && (
 									<Button variant='text' color='inherit' onClick={handleFoster}>
 										<PetsIcon sx={{ mr: 1 }} />
 										{t('action-foster')}
 									</Button>
 								)}
-								<Button variant='text' color='inherit' onClick={handleSave}>
+								{user && <Button variant='text' color='inherit' onClick={handleSave}>
 									{saved ? (
 										<StarIcon sx={{ mr: 1 }} />
 									) : (
 										<StarBorderIcon sx={{ mr: 1 }} />
 									)}
 									{t('action-save')}
-								</Button>
+								</Button>}
 								{user?.admin && (
 									<Button variant='text' color='inherit' onClick={handleEdit}>
 										<EditIcon sx={{ mr: 1 }} />
 										{t('action-edit')}
 									</Button>
 								)}
-								<Button variant='text' color='inherit' onClick={handleClose}>
+								<Button variant='text' color='inherit' onClick={closeDetails}>
 									<CloseIcon sx={{ mr: 1 }} />
 									{t('action-close')}
 								</Button>
 							</ButtonGroup>
-						</CardActions>
-					)}
+					</CardActions>
 				</Card>
 			</Fade>
 		</Modal>

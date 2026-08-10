@@ -14,6 +14,7 @@ export interface User {
 export interface Pet {
 	id: string;
 	relation_id?: string;
+	taken_by_user_id?: string | null;
 	type: string;
 	name: string;
 	adoption_status: string;
