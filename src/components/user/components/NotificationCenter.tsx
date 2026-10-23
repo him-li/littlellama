@@ -14,13 +14,26 @@ import {
 } from "@/src/ui/mui";
 import { GET, PUT } from "../../../utils/api";
 import type { Notification } from "../../../types/models";
+import { PanelListSkeleton } from "../../components/LoadingSkeletons";
 
 export default function NotificationCenter() {
   const { t } = useTranslation();
   const [items, setItems] = useState<Notification[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    void GET<Notification[]>("/notifications").then(setItems);
+    void GET<Notification[]>("/notifications")
+      .then(setItems)
+      .finally(() => setLoading(false));
   }, []);
+  if (loading)
+    return (
+      <Box
+        component="section"
+        sx={{ py: 4, maxWidth: 1200, mx: "auto", width: "100%" }}
+      >
+        <PanelListSkeleton rows={1} />
+      </Box>
+    );
   if (!items.length) return null;
   const unread = items.filter((item) => !item.read).length;
   const markAllRead = async () => {

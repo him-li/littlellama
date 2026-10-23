@@ -10,6 +10,7 @@ import {
   CardContent,
   IconButton,
   Paper,
+  Skeleton,
   Stack,
   TextField,
   Typography,
@@ -23,6 +24,7 @@ export default function ChatWidget({ user }: { user: User }) {
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
+  const loading = open && !conversation;
   const socket = useRef<WebSocket | null>(null);
   useEffect(() => {
     if (!open || conversation) return;
@@ -83,6 +85,16 @@ export default function ChatWidget({ user }: { user: User }) {
               </IconButton>
             </Stack>
             <Stack spacing={1} sx={{ flex: 1, overflowY: "auto", mb: 2 }}>
+              {loading &&
+                Array.from({ length: 4 }, (_, index) => (
+                  <Skeleton
+                    key={index}
+                    variant="rounded"
+                    width={index % 2 ? "72%" : "58%"}
+                    height={46}
+                    sx={{ alignSelf: index % 2 ? "flex-end" : "flex-start" }}
+                  />
+                ))}
               {messages.map((message) => (
                 <Paper
                   key={message.id}

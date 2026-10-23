@@ -31,13 +31,17 @@ import ChatWidget from "./components/ChatWidget";
 export default function Home({ user }: { user: User | null }) {
   const { t } = useTranslation();
   const [petsData, setPetsData] = useState<Pet[]>([]);
+  const [petsLoading, setPetsLoading] = useState(true);
   const [openSignup, setOpenSignup] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
 
   useEffect(() => {
-    void GET<Pet[]>("/pet").then(setPetsData).catch(console.error);
+    void GET<Pet[]>("/pet")
+      .then(setPetsData)
+      .catch(console.error)
+      .finally(() => setPetsLoading(false));
   }, []);
   const handleLogout = () => {
     localStorage.removeItem("USER");
@@ -219,7 +223,12 @@ export default function Home({ user }: { user: User | null }) {
               {t("text-search")}
             </Button>
           </Stack>
-          <PetsList petsData={petsData.slice(0, 6)} hide user={user} />
+          <PetsList
+            petsData={petsData.slice(0, 6)}
+            loading={petsLoading}
+            hide
+            user={user}
+          />
         </Container>
       </Box>
       <Snackbar open={openSuccess} autoHideDuration={4000} onClose={closeAlert}>

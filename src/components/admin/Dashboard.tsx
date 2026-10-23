@@ -32,13 +32,18 @@ import type {
 } from "../../types/models";
 import { dottedHeroContentSx, dottedHeroSx } from "../../utils/styles";
 import PetsList from "../pet/components/PetsList";
+import { PanelListSkeleton } from "../components/LoadingSkeletons";
 
 function ActivityFeed() {
   const { t } = useTranslation();
   const [items, setItems] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    void GET<Activity[]>("/activity").then(setItems);
+    void GET<Activity[]>("/activity")
+      .then(setItems)
+      .finally(() => setLoading(false));
   }, []);
+  if (loading) return <PanelListSkeleton />;
   return (
     <Stack spacing={1.5}>
       {!items.length && <Alert severity="info">{t("admin-no-activity")}</Alert>}
@@ -65,9 +70,13 @@ function ActivityFeed() {
 function InquiryList() {
   const { t } = useTranslation();
   const [items, setItems] = useState<Inquiry[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    void GET<Inquiry[]>("/contact").then(setItems);
+    void GET<Inquiry[]>("/contact")
+      .then(setItems)
+      .finally(() => setLoading(false));
   }, []);
+  if (loading) return <PanelListSkeleton />;
   const change = async (item: Inquiry, next: Inquiry["status"]) => {
     const updated = await PUT<Inquiry>(`/contact/${item.id}`, { status: next });
     setItems((all) =>
@@ -118,13 +127,16 @@ function SupportInbox({ user }: { user: User }) {
   const [selected, setSelected] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
+  const [loading, setLoading] = useState(true);
   const socket = useRef<WebSocket | null>(null);
   useEffect(() => {
-    void GET<Conversation[]>("/chat/conversations").then((data) => {
-      setItems(data);
-      setSelected(data[0] ?? null);
-      setMessages(data[0]?.messages ?? []);
-    });
+    void GET<Conversation[]>("/chat/conversations")
+      .then((data) => {
+        setItems(data);
+        setSelected(data[0] ?? null);
+        setMessages(data[0]?.messages ?? []);
+      })
+      .finally(() => setLoading(false));
   }, []);
   useEffect(() => {
     if (!selected) return;
@@ -146,6 +158,7 @@ function SupportInbox({ user }: { user: User }) {
     setSelected(item);
     setMessages(item.messages);
   };
+  if (loading) return <PanelListSkeleton rows={3} />;
   if (!items.length)
     return <Alert severity="info">{t("chat-no-conversations")}</Alert>;
   return (
@@ -222,8 +235,11 @@ function SupportInbox({ user }: { user: User }) {
 function UserManagement({ currentUser }: { currentUser: User }) {
   const { t } = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    void GET<User[]>("/user").then(setUsers);
+    void GET<User[]>("/user")
+      .then(setUsers)
+      .finally(() => setLoading(false));
   }, []);
   const changeRole = async (user: User, role: User["role"]) => {
     const updated = await PUT<User>(`/user/${user.id}/role`, { role });
@@ -231,6 +247,7 @@ function UserManagement({ currentUser }: { currentUser: User }) {
       all.map((entry) => (entry.id === user.id ? updated : entry)),
     );
   };
+  if (loading) return <PanelListSkeleton />;
   return (
     <Stack spacing={1.5}>
       {users.map((user) => (
@@ -271,10 +288,13 @@ function UserManagement({ currentUser }: { currentUser: User }) {
 
 function PetManagement({ user }: { user: User }) {
   const [pets, setPets] = useState<Pet[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    void GET<Pet[]>("/pet").then(setPets);
+    void GET<Pet[]>("/pet")
+      .then(setPets)
+      .finally(() => setLoading(false));
   }, []);
-  return <PetsList petsData={pets} user={user} />;
+  return <PetsList petsData={pets} loading={loading} user={user} />;
 }
 
 export default function Dashboard({ user }: { user: User }) {

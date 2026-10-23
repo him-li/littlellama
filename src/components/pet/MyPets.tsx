@@ -18,11 +18,13 @@ export default function MyPets({ user }: { user: User | null }) {
   const [collections, setCollections] =
     useState<PetCollections>(emptyCollections);
   const [tab, setTab] = useState(0);
+  const [loadedUserId, setLoadedUserId] = useState<string | null>(null);
   useEffect(() => {
     if (!user?.id) return;
     void GET<PetCollections>(`/pet/user/${user.id}`)
       .then(setCollections)
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setLoadedUserId(user.id));
   }, [user?.id]);
   if (!user)
     return (
@@ -32,6 +34,7 @@ export default function MyPets({ user }: { user: User | null }) {
     );
   const displayedPets =
     tab === 0 ? collections.owned_pets : collections.saved_pets;
+  const loading = loadedUserId !== user.id;
   return (
     <Box>
       <Box sx={{ ...dottedHeroSx, py: { xs: 5, md: 7 } }}>
@@ -43,9 +46,11 @@ export default function MyPets({ user }: { user: User | null }) {
             {t("mypets-welcome", { name: user.firstname ?? user.firstName })}
           </Typography>
           <Typography sx={{ mt: 1, color: "rgba(255,255,255,.75)" }}>
-            {collections.owned_pets.length
-              ? t("mypets-has-pets")
-              : t("mypets-no-pets")}
+            {loading
+              ? t("text-searching")
+              : collections.owned_pets.length
+                ? t("mypets-has-pets")
+                : t("mypets-no-pets")}
           </Typography>
         </Container>
       </Box>
@@ -66,6 +71,7 @@ export default function MyPets({ user }: { user: User | null }) {
       <Container maxWidth="lg" sx={{ py: { xs: 6, md: 9 } }}>
         <PetsList
           petsData={displayedPets}
+          loading={loading}
           status
           user={user}
           emptyTitle={
