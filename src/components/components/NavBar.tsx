@@ -25,6 +25,7 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import ContactSupportRoundedIcon from "@mui/icons-material/ContactSupportRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import littleLlama from "../../assets/littleLlama.png";
@@ -53,6 +54,11 @@ export default function Navbar({ user }: { user: User | null }) {
       label: user ? t("link-mypets") : t("link-pets"),
       href: user ? "/mypets" : "/pets",
       icon: <PetsRoundedIcon fontSize="small" />,
+    },
+    {
+      label: t("link-contact"),
+      href: "/contact",
+      icon: <ContactSupportRoundedIcon fontSize="small" />,
     },
   ];
   const navigate = (href: string) => {
@@ -127,16 +133,18 @@ export default function Navbar({ user }: { user: User | null }) {
                 startIcon={page.icon}
                 color="inherit"
                 sx={{
-                  bgcolor: pathname === page.href
-                    ? "rgba(var(--mui-palette-primary-mainChannel) / .14)"
-                    : "transparent",
+                  bgcolor:
+                    pathname === page.href
+                      ? "rgba(var(--mui-palette-primary-mainChannel) / .14)"
+                      : "transparent",
                   color: "text.primary",
-                  "&:hover": pathname === page.href
-                    ? {
-                        bgcolor:
-                          "rgba(var(--mui-palette-primary-mainChannel) / .22)",
-                      }
-                    : undefined,
+                  "&:hover":
+                    pathname === page.href
+                      ? {
+                          bgcolor:
+                            "rgba(var(--mui-palette-primary-mainChannel) / .22)",
+                        }
+                      : undefined,
                 }}
               >
                 {page.label}
@@ -144,7 +152,9 @@ export default function Navbar({ user }: { user: User | null }) {
             ))}
           </Stack>
 
-          {user?.admin && (
+          {(user?.admin ||
+            user?.role === "admin" ||
+            user?.role === "support") && (
             <>
               <Tooltip title={t("admin-pages")}>
                 <IconButton
@@ -174,12 +184,14 @@ export default function Navbar({ user }: { user: User | null }) {
                 open={Boolean(adminAnchor)}
                 onClose={() => setAdminAnchor(null)}
               >
-                <MenuItem onClick={() => navigate("/addpet")}>
-                  <ListItemIcon>
-                    <AddCircleOutlineRoundedIcon fontSize="small" />
-                  </ListItemIcon>
-                  {t("link-addpet")}
-                </MenuItem>
+                {user?.role !== "support" && (
+                  <MenuItem onClick={() => navigate("/addpet")}>
+                    <ListItemIcon>
+                      <AddCircleOutlineRoundedIcon fontSize="small" />
+                    </ListItemIcon>
+                    {t("link-addpet")}
+                  </MenuItem>
+                )}
                 <MenuItem onClick={() => navigate("/dashboard")}>
                   <ListItemIcon>
                     <DashboardRoundedIcon fontSize="small" />
@@ -220,7 +232,9 @@ export default function Navbar({ user }: { user: User | null }) {
             ))}
           </Menu>
           <Tooltip
-            title={t(darkMode ? "theme-switch-to-light" : "theme-switch-to-dark")}
+            title={t(
+              darkMode ? "theme-switch-to-light" : "theme-switch-to-dark",
+            )}
           >
             <IconButton
               aria-label={t(

@@ -25,6 +25,8 @@ import { GET } from "../../utils/api";
 import heroImage from "../../assets/your-pet-included.jpg";
 import type { Pet, User } from "../../types/models";
 import { dottedHeroContentSx, dottedHeroSx } from "../../utils/styles";
+import NotificationCenter from "./components/NotificationCenter";
+import ChatWidget from "./components/ChatWidget";
 
 export default function Home({ user }: { user: User | null }) {
   const { t } = useTranslation();
@@ -185,6 +187,8 @@ export default function Home({ user }: { user: User | null }) {
         </Container>
       </Box>
 
+      {user && <NotificationCenter />}
+
       <Box component="section" sx={{ py: { xs: 7, md: 10 } }}>
         <Container maxWidth="lg">
           <Stack
@@ -223,6 +227,7 @@ export default function Home({ user }: { user: User | null }) {
           {t("message-logout-success")}
         </Alert>
       </Snackbar>
+      {user && <ChatWidget user={user} />}
     </>
   );
 }
